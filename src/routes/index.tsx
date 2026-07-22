@@ -7,8 +7,8 @@ export const Route = createFileRoute("/")({
     meta: [
       { title: "SAQU Mutaba'ah Tahfidz — Aplikasi Pemantauan Hafalan Al-Qur'an SD" },
       { name: "description", content: "Kelola setoran ziyadah, muroja'ah, tasmi', ujian tahfidz dengan mushaf digital, absensi, target juz, dan rapor santri SD dalam satu aplikasi." },
-      { property: "og:title", content: "SAQU Mutaba'ah Tahfidz" },
-      { property: "og:description", content: "Semua kebutuhan mutaba'ah tahfidz sekolah dasar dalam satu aplikasi." },
+      { property: "og:title", content: "SAQU Mutaba'ah Tahfidz — Aplikasi Pemantauan Hafalan Al-Qur'an SD" },
+      { property: "og:description", content: "Kelola setoran ziyadah, muroja'ah, tasmi', ujian tahfidz dengan mushaf digital, absensi, target juz, dan rapor santri SD dalam satu aplikasi." },
     ],
   }),
   component: Landing,
