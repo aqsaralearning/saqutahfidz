@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthenticatedSetoranRouteImport } from './routes/_authenticated/setoran'
 import { Route as AuthenticatedSantriRouteImport } from './routes/_authenticated/santri'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedSantriIdRouteImport } from './routes/_authenticated/santri.$id'
@@ -29,6 +30,11 @@ const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedSetoranRoute = AuthenticatedSetoranRouteImport.update({
+  id: '/setoran',
+  path: '/setoran',
+  getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AuthenticatedSantriRoute = AuthenticatedSantriRouteImport.update({
   id: '/santri',
@@ -51,6 +57,7 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/santri': typeof AuthenticatedSantriRouteWithChildren
+  '/setoran': typeof AuthenticatedSetoranRoute
   '/santri/$id': typeof AuthenticatedSantriIdRoute
 }
 export interface FileRoutesByTo {
@@ -58,6 +65,7 @@ export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/santri': typeof AuthenticatedSantriRouteWithChildren
+  '/setoran': typeof AuthenticatedSetoranRoute
   '/santri/$id': typeof AuthenticatedSantriIdRoute
 }
 export interface FileRoutesById {
@@ -67,13 +75,20 @@ export interface FileRoutesById {
   '/auth': typeof AuthRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/santri': typeof AuthenticatedSantriRouteWithChildren
+  '/_authenticated/setoran': typeof AuthenticatedSetoranRoute
   '/_authenticated/santri/$id': typeof AuthenticatedSantriIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/auth' | '/dashboard' | '/santri' | '/santri/$id'
+  fullPaths:
+    | '/'
+    | '/auth'
+    | '/dashboard'
+    | '/santri'
+    | '/setoran'
+    | '/santri/$id'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/auth' | '/dashboard' | '/santri' | '/santri/$id'
+  to: '/' | '/auth' | '/dashboard' | '/santri' | '/setoran' | '/santri/$id'
   id:
     | '__root__'
     | '/'
@@ -81,6 +96,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/_authenticated/dashboard'
     | '/_authenticated/santri'
+    | '/_authenticated/setoran'
     | '/_authenticated/santri/$id'
   fileRoutesById: FileRoutesById
 }
@@ -112,6 +128,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/setoran': {
+      id: '/_authenticated/setoran'
+      path: '/setoran'
+      fullPath: '/setoran'
+      preLoaderRoute: typeof AuthenticatedSetoranRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/santri': {
       id: '/_authenticated/santri'
@@ -151,11 +174,13 @@ const AuthenticatedSantriRouteWithChildren =
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedSantriRoute: typeof AuthenticatedSantriRouteWithChildren
+  AuthenticatedSetoranRoute: typeof AuthenticatedSetoranRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   AuthenticatedSantriRoute: AuthenticatedSantriRouteWithChildren,
+  AuthenticatedSetoranRoute: AuthenticatedSetoranRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =
