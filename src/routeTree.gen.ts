@@ -9,38 +9,185 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as AuthRouteImport } from './routes/auth'
+import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthenticatedUjianRouteImport } from './routes/_authenticated/ujian'
+import { Route as AuthenticatedSetoranRouteImport } from './routes/_authenticated/setoran'
+import { Route as AuthenticatedSantriRouteImport } from './routes/_authenticated/santri'
+import { Route as AuthenticatedPengaturanRouteImport } from './routes/_authenticated/pengaturan'
+import { Route as AuthenticatedLaporanRouteImport } from './routes/_authenticated/laporan'
+import { Route as AuthenticatedHalaqohRouteImport } from './routes/_authenticated/halaqoh'
+import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
+import { Route as AuthenticatedUjianIdRouteImport } from './routes/_authenticated/ujian.$id'
+import { Route as AuthenticatedSantriIdRouteImport } from './routes/_authenticated/santri.$id'
 
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
+  id: '/_authenticated',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedUjianRoute = AuthenticatedUjianRouteImport.update({
+  id: '/ujian',
+  path: '/ujian',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedSetoranRoute = AuthenticatedSetoranRouteImport.update({
+  id: '/setoran',
+  path: '/setoran',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedSantriRoute = AuthenticatedSantriRouteImport.update({
+  id: '/santri',
+  path: '/santri',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedPengaturanRoute = AuthenticatedPengaturanRouteImport.update({
+  id: '/pengaturan',
+  path: '/pengaturan',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedLaporanRoute = AuthenticatedLaporanRouteImport.update({
+  id: '/laporan',
+  path: '/laporan',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedHalaqohRoute = AuthenticatedHalaqohRouteImport.update({
+  id: '/halaqoh',
+  path: '/halaqoh',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedUjianIdRoute = AuthenticatedUjianIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => AuthenticatedUjianRoute,
+} as any)
+const AuthenticatedSantriIdRoute = AuthenticatedSantriIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => AuthenticatedSantriRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
+  '/dashboard': typeof AuthenticatedDashboardRoute
+  '/halaqoh': typeof AuthenticatedHalaqohRoute
+  '/laporan': typeof AuthenticatedLaporanRoute
+  '/pengaturan': typeof AuthenticatedPengaturanRoute
+  '/santri': typeof AuthenticatedSantriRouteWithChildren
+  '/setoran': typeof AuthenticatedSetoranRoute
+  '/ujian': typeof AuthenticatedUjianRouteWithChildren
+  '/santri/$id': typeof AuthenticatedSantriIdRoute
+  '/ujian/$id': typeof AuthenticatedUjianIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
+  '/dashboard': typeof AuthenticatedDashboardRoute
+  '/halaqoh': typeof AuthenticatedHalaqohRoute
+  '/laporan': typeof AuthenticatedLaporanRoute
+  '/pengaturan': typeof AuthenticatedPengaturanRoute
+  '/santri': typeof AuthenticatedSantriRouteWithChildren
+  '/setoran': typeof AuthenticatedSetoranRoute
+  '/ujian': typeof AuthenticatedUjianRouteWithChildren
+  '/santri/$id': typeof AuthenticatedSantriIdRoute
+  '/ujian/$id': typeof AuthenticatedUjianIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
+  '/auth': typeof AuthRoute
+  '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
+  '/_authenticated/halaqoh': typeof AuthenticatedHalaqohRoute
+  '/_authenticated/laporan': typeof AuthenticatedLaporanRoute
+  '/_authenticated/pengaturan': typeof AuthenticatedPengaturanRoute
+  '/_authenticated/santri': typeof AuthenticatedSantriRouteWithChildren
+  '/_authenticated/setoran': typeof AuthenticatedSetoranRoute
+  '/_authenticated/ujian': typeof AuthenticatedUjianRouteWithChildren
+  '/_authenticated/santri/$id': typeof AuthenticatedSantriIdRoute
+  '/_authenticated/ujian/$id': typeof AuthenticatedUjianIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/auth'
+    | '/dashboard'
+    | '/halaqoh'
+    | '/laporan'
+    | '/pengaturan'
+    | '/santri'
+    | '/setoran'
+    | '/ujian'
+    | '/santri/$id'
+    | '/ujian/$id'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/auth'
+    | '/dashboard'
+    | '/halaqoh'
+    | '/laporan'
+    | '/pengaturan'
+    | '/santri'
+    | '/setoran'
+    | '/ujian'
+    | '/santri/$id'
+    | '/ujian/$id'
+  id:
+    | '__root__'
+    | '/'
+    | '/_authenticated'
+    | '/auth'
+    | '/_authenticated/dashboard'
+    | '/_authenticated/halaqoh'
+    | '/_authenticated/laporan'
+    | '/_authenticated/pengaturan'
+    | '/_authenticated/santri'
+    | '/_authenticated/setoran'
+    | '/_authenticated/ujian'
+    | '/_authenticated/santri/$id'
+    | '/_authenticated/ujian/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
+  AuthRoute: typeof AuthRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated': {
+      id: '/_authenticated'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AuthenticatedRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -48,22 +195,122 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/ujian': {
+      id: '/_authenticated/ujian'
+      path: '/ujian'
+      fullPath: '/ujian'
+      preLoaderRoute: typeof AuthenticatedUjianRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/setoran': {
+      id: '/_authenticated/setoran'
+      path: '/setoran'
+      fullPath: '/setoran'
+      preLoaderRoute: typeof AuthenticatedSetoranRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/santri': {
+      id: '/_authenticated/santri'
+      path: '/santri'
+      fullPath: '/santri'
+      preLoaderRoute: typeof AuthenticatedSantriRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/pengaturan': {
+      id: '/_authenticated/pengaturan'
+      path: '/pengaturan'
+      fullPath: '/pengaturan'
+      preLoaderRoute: typeof AuthenticatedPengaturanRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/laporan': {
+      id: '/_authenticated/laporan'
+      path: '/laporan'
+      fullPath: '/laporan'
+      preLoaderRoute: typeof AuthenticatedLaporanRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/halaqoh': {
+      id: '/_authenticated/halaqoh'
+      path: '/halaqoh'
+      fullPath: '/halaqoh'
+      preLoaderRoute: typeof AuthenticatedHalaqohRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/dashboard': {
+      id: '/_authenticated/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof AuthenticatedDashboardRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/ujian/$id': {
+      id: '/_authenticated/ujian/$id'
+      path: '/$id'
+      fullPath: '/ujian/$id'
+      preLoaderRoute: typeof AuthenticatedUjianIdRouteImport
+      parentRoute: typeof AuthenticatedUjianRoute
+    }
+    '/_authenticated/santri/$id': {
+      id: '/_authenticated/santri/$id'
+      path: '/$id'
+      fullPath: '/santri/$id'
+      preLoaderRoute: typeof AuthenticatedSantriIdRouteImport
+      parentRoute: typeof AuthenticatedSantriRoute
+    }
   }
 }
 
+interface AuthenticatedSantriRouteChildren {
+  AuthenticatedSantriIdRoute: typeof AuthenticatedSantriIdRoute
+}
+
+const AuthenticatedSantriRouteChildren: AuthenticatedSantriRouteChildren = {
+  AuthenticatedSantriIdRoute: AuthenticatedSantriIdRoute,
+}
+
+const AuthenticatedSantriRouteWithChildren =
+  AuthenticatedSantriRoute._addFileChildren(AuthenticatedSantriRouteChildren)
+
+interface AuthenticatedUjianRouteChildren {
+  AuthenticatedUjianIdRoute: typeof AuthenticatedUjianIdRoute
+}
+
+const AuthenticatedUjianRouteChildren: AuthenticatedUjianRouteChildren = {
+  AuthenticatedUjianIdRoute: AuthenticatedUjianIdRoute,
+}
+
+const AuthenticatedUjianRouteWithChildren =
+  AuthenticatedUjianRoute._addFileChildren(AuthenticatedUjianRouteChildren)
+
+interface AuthenticatedRouteRouteChildren {
+  AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
+  AuthenticatedHalaqohRoute: typeof AuthenticatedHalaqohRoute
+  AuthenticatedLaporanRoute: typeof AuthenticatedLaporanRoute
+  AuthenticatedPengaturanRoute: typeof AuthenticatedPengaturanRoute
+  AuthenticatedSantriRoute: typeof AuthenticatedSantriRouteWithChildren
+  AuthenticatedSetoranRoute: typeof AuthenticatedSetoranRoute
+  AuthenticatedUjianRoute: typeof AuthenticatedUjianRouteWithChildren
+}
+
+const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
+  AuthenticatedHalaqohRoute: AuthenticatedHalaqohRoute,
+  AuthenticatedLaporanRoute: AuthenticatedLaporanRoute,
+  AuthenticatedPengaturanRoute: AuthenticatedPengaturanRoute,
+  AuthenticatedSantriRoute: AuthenticatedSantriRouteWithChildren,
+  AuthenticatedSetoranRoute: AuthenticatedSetoranRoute,
+  AuthenticatedUjianRoute: AuthenticatedUjianRouteWithChildren,
+}
+
+const AuthenticatedRouteRouteWithChildren =
+  AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
+  AuthRoute: AuthRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
