@@ -238,6 +238,7 @@ export type Database = {
           date: string
           id: string
           juz: number | null
+          murojaah_type: string
           notes: string | null
           score: number | null
           status: Database["public"]["Enums"]["setoran_status"]
@@ -251,6 +252,7 @@ export type Database = {
           date?: string
           id?: string
           juz?: number | null
+          murojaah_type?: string
           notes?: string | null
           score?: number | null
           status?: Database["public"]["Enums"]["setoran_status"]
@@ -264,6 +266,7 @@ export type Database = {
           date?: string
           id?: string
           juz?: number | null
+          murojaah_type?: string
           notes?: string | null
           score?: number | null
           status?: Database["public"]["Enums"]["setoran_status"]
@@ -410,6 +413,7 @@ export type Database = {
           student_id: string
           surah_from: string
           surah_to: string | null
+          tasmi_type: string
           teacher_id: string
         }
         Insert: {
@@ -424,6 +428,7 @@ export type Database = {
           student_id: string
           surah_from: string
           surah_to?: string | null
+          tasmi_type?: string
           teacher_id: string
         }
         Update: {
@@ -438,6 +443,7 @@ export type Database = {
           student_id?: string
           surah_from?: string
           surah_to?: string | null
+          tasmi_type?: string
           teacher_id?: string
         }
         Relationships: [
