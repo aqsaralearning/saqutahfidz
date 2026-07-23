@@ -1,117 +1,38 @@
-# Aplikasi Mutaba'ah Tahfidz SAQU
+## Diagnosis
 
-Aplikasi web pemantauan hafalan Al-Qur'an untuk sekolah dasar dengan multi-user (admin, guru/musyrif, wali santri), database cloud, dan tema warna-warni ramah anak.
+Error `new row violates row-level security policy for table students` muncul karena RLS pada tabel `public.students` **sudah benar** — hanya user dengan role `admin` yang boleh insert/update/delete:
 
-## Ruang Lingkup Fitur
+```
+students_admin_all      → is_admin(auth.uid())     (ALL, authenticated)
+students_musyrif_read   → SELECT untuk musyrif
+students_musyrif_update → UPDATE untuk musyrif halaqohnya sendiri
+students_wali_read_own  → SELECT untuk wali santrinya
+```
 
-### 1. Manajemen Data Master
-- **Santri**: nama, NIS, kelas, jenis kelamin, tanggal lahir, nama wali, foto, kelompok halaqoh
-- **Guru/Musyrif**: nama, NIP, kelompok halaqoh yang diampu
-- **Kelas & Halaqoh**: tingkat kelas SD (1-6), pengelompokan halaqoh
-- **Target Hafalan**: target juz/surah per santri per semester
+Tidak ada policy untuk `anon` (aman, sesuai permintaan).
 
-### 2. Setoran Hafalan (3 modul inti)
-- **Ziyadah** (setoran hafalan baru): surah, ayat mulai-selesai, juz, halaman, nilai, catatan
-- **Muroja'ah** (mengulang hafalan): rentang hafalan yang diulang, kualitas, catatan
-- **Tasmi'** (menyimak / setor panjang): rentang, durasi, penilaian keseluruhan
+**Akar masalahnya:** kedua akun yang sudah terdaftar (`saku cianjur`, `Aqsara Learning`) **belum punya role apa pun** di tabel `user_roles`, sehingga `is_admin(auth.uid())` = false → insert ditolak.
 
-Setiap entri: tanggal, santri, guru penilai, nilai (A-D), status (lancar / kurang lancar / mengulang).
+Form Tambah Santri di `src/routes/_authenticated/santri.tsx` sudah memakai session pengguna login (`supabase.from("students").insert(form)` lewat client yang membawa bearer token user), jadi kode form tidak perlu diubah.
 
-### 3. Ujian Tahfidz dengan Mushaf Digital
-- Pilih santri + rentang hafalan yang diuji
-- Tampilan **mushaf digital** per halaman (gambar mushaf standar Madinah / Kemenag) agar penguji bisa memeriksa langsung sambil menandai kesalahan
-- Rubrik penilaian:
-  - **Makhroj Huruf** (skor 1-100)
-  - **Tajwid**: Mad, Ghunnah, Qolqolah (masing-masing 1-100)
-  - **Kelancaran** (skor 1-100)
-  - **Adab & Tartil** (skor 1-100)
-- Tombol tandai kesalahan per ayat (klik ayat → catat jenis kesalahan)
-- Nilai akhir otomatis + predikat (Mumtaz / Jayyid Jiddan / Jayyid / Maqbul)
-- Sertifikat kelulusan juz otomatis (PDF)
+## Rencana Perbaikan
 
-### 4. Absensi & Jadwal Halaqoh
-- Jadwal harian halaqoh (hari, jam, ruang, musyrif)
-- Absensi harian santri (hadir / izin / sakit / alpa)
+1. **Berikan role `admin` ke akun `saku cianjur`** (akun utama lembaga) lewat insert data ke `public.user_roles`. Setelah ini, akun tersebut bisa menambah/mengubah/menghapus santri dari halaman **Data Santri**.
+2. Tidak mengubah RLS — sudah sesuai spesifikasi (admin-only untuk tulis, anon tidak punya akses apa pun).
+3. Tidak mengubah kode form — sudah memakai session user login.
 
-### 5. Progres & Target
-- Dashboard per santri: total hafalan (juz + halaman), grafik pencapaian mingguan/bulanan, persentase pencapaian target
-- Leaderboard kelas / halaqoh
+## Cara Mengisi Data Santri (setelah role admin aktif)
 
-### 6. Laporan & Rapor
-- Rekap setoran per santri / kelas / periode
-- **Rapor tahfidz PDF** per semester (data santri, ringkasan ziyadah/muroja'ah/tasmi', hasil ujian, komentar musyrif, tanda tangan)
-- **Sertifikat juz** PDF
-- Ekspor CSV
+1. Login sebagai akun admin di `/auth`.
+2. Buka menu **Data Santri** di sidebar.
+3. Klik tombol **Tambah Santri** di kanan atas.
+4. Isi NIS, Nama Lengkap, Jenis Kelamin, Kelas, Halaqoh (opsional), Target Juz, Nama & No. HP Wali → **Simpan**.
+5. Untuk menetapkan halaqoh, buat dulu halaqoh di menu **Halaqoh** lalu pilih di form santri.
 
-### 7. Autentikasi & Peran
-- Login email/password + Google
-- Peran (disimpan di tabel `user_roles` terpisah): `admin`, `musyrif`, `wali`
-  - **Admin**: kelola semua data, user, laporan
-  - **Musyrif**: input setoran, ujian, absensi untuk santri di halaqohnya
-  - **Wali**: hanya melihat progres anaknya, rapor, sertifikat
+## Lokasi Database
 
-## Desain Visual (Ceria Anak SD)
-- Palet: biru `#2563EB`, kuning `#F59E0B`, hijau `#10B981`, merah `#EF4444` + latar putih hangat
-- Font: Baloo 2 / Fredoka (headline ramah anak) + Inter (body)
-- Sudut membulat besar (`rounded-2xl`), ilustrasi/emoji, kartu berwarna
-- Ikon lucide dengan warna aksen bergantian
-- Motion halus (hover scale, fade), animasi konfeti saat santri selesai 1 juz
+Semua data tahfidz (santri, ziyadah, muroja'ah, tasmi', ujian, absensi, halaqoh, dsb.) disimpan di **Lovable Cloud** (backend terkelola) pada 12 tabel: `students`, `ziyadah_entries`, `murojaah_entries`, `tasmi_entries`, `exams`, `exam_mistakes`, `attendance`, `halaqoh`, `halaqoh_schedule`, `profiles`, `user_roles`, `parent_students`. Bisa dilihat lewat tombol **View Backend** di editor Lovable.
 
-## Rencana Teknis
+## Untuk Menambah Admin Lain di Masa Depan
 
-### Backend (Lovable Cloud)
-Tabel utama (public schema, dengan GRANT + RLS):
-- `profiles` (user profile: nama, foto, kelas, dsb.)
-- `user_roles` + enum `app_role` + fungsi `has_role()` (security definer)
-- `students` (santri)
-- `teachers` (musyrif) — atau via role
-- `halaqoh` (kelompok halaqoh)
-- `student_halaqoh` (relasi santri-halaqoh)
-- `parent_students` (relasi wali-santri)
-- `ziyadah_entries`, `murojaah_entries`, `tasmi_entries`
-- `exams` (ujian tahfidz: header) + `exam_scores` (rubrik) + `exam_mistakes` (catatan per ayat)
-- `attendance` (absensi harian)
-- `schedule` (jadwal halaqoh)
-- `targets` (target semester)
-
-RLS:
-- Admin: full access
-- Musyrif: CRUD data santri di halaqoh yang diampunya
-- Wali: SELECT data anak-anaknya saja
-
-### Frontend (TanStack Start)
-Rute:
-- `/` — landing publik (info sekolah + tombol Login)
-- `/auth` — login/register
-- `/_authenticated/dashboard` — dashboard peran
-- `/_authenticated/santri` (list) + `/_authenticated/santri/$id` (detail + progres)
-- `/_authenticated/ziyadah`, `/muroja'ah`, `/tasmi` — form + list setoran
-- `/_authenticated/ujian` (list) + `/_authenticated/ujian/$id` — halaman ujian dengan mushaf
-- `/_authenticated/halaqoh` — jadwal & absensi
-- `/_authenticated/laporan` — rekap + generate PDF (rapor & sertifikat)
-- `/_authenticated/admin/users` — manajemen user (admin only)
-
-Library:
-- `@tanstack/react-query` (sudah ada)
-- `jspdf` + `jspdf-autotable` untuk rapor & sertifikat PDF
-- `recharts` untuk grafik progres
-- Mushaf: menggunakan gambar halaman mushaf dari sumber publik (mis. `everyayah.com` per-page images atau `qul.tarteel.ai`); tampilkan per halaman berdasarkan nomor halaman input
-
-### Server functions
-Semua tulis data via `createServerFn` + `requireSupabaseAuth`, akses cek role dgn `has_role()`.
-
-## Tahap Implementasi
-1. Aktifkan Lovable Cloud + auth (email + Google) + tabel & RLS
-2. Design system (warna ceria, font, komponen kartu)
-3. Landing page + auth
-4. Layout dashboard + navigasi peran
-5. CRUD santri, halaqoh, jadwal
-6. Modul setoran (Ziyadah / Muroja'ah / Tasmi')
-7. Modul ujian tahfidz + mushaf digital + rubrik
-8. Absensi & target
-9. Dashboard progres + grafik
-10. Laporan + generate PDF rapor & sertifikat
-11. Halaman wali (read-only progres anak)
-12. SEO, sitemap, polish
-
-Aplikasi cukup besar — implementasi akan berlangsung bertahap; versi pertama akan mencakup fondasi (auth, data santri, ziyadah/muroja'ah/tasmi', ujian dengan mushaf & rubrik, dashboard, laporan dasar & rapor PDF), lalu fitur pendukung disempurnakan berikutnya.
+Setelah jadi admin, buka menu **Pengaturan** → bagian **Pengguna & Peran** → klik `+ admin` di baris user yang diinginkan.
