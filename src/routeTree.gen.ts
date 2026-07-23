@@ -13,6 +13,7 @@ import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedUjianRouteImport } from './routes/_authenticated/ujian'
+import { Route as AuthenticatedTasmiRouteImport } from './routes/_authenticated/tasmi'
 import { Route as AuthenticatedSetoranRouteImport } from './routes/_authenticated/setoran'
 import { Route as AuthenticatedSantriRouteImport } from './routes/_authenticated/santri'
 import { Route as AuthenticatedPengaturanRouteImport } from './routes/_authenticated/pengaturan'
@@ -39,6 +40,11 @@ const IndexRoute = IndexRouteImport.update({
 const AuthenticatedUjianRoute = AuthenticatedUjianRouteImport.update({
   id: '/ujian',
   path: '/ujian',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedTasmiRoute = AuthenticatedTasmiRouteImport.update({
+  id: '/tasmi',
+  path: '/tasmi',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AuthenticatedSetoranRoute = AuthenticatedSetoranRouteImport.update({
@@ -91,6 +97,7 @@ export interface FileRoutesByFullPath {
   '/pengaturan': typeof AuthenticatedPengaturanRoute
   '/santri': typeof AuthenticatedSantriRouteWithChildren
   '/setoran': typeof AuthenticatedSetoranRoute
+  '/tasmi': typeof AuthenticatedTasmiRoute
   '/ujian': typeof AuthenticatedUjianRouteWithChildren
   '/santri/$id': typeof AuthenticatedSantriIdRoute
   '/ujian/$id': typeof AuthenticatedUjianIdRoute
@@ -104,6 +111,7 @@ export interface FileRoutesByTo {
   '/pengaturan': typeof AuthenticatedPengaturanRoute
   '/santri': typeof AuthenticatedSantriRouteWithChildren
   '/setoran': typeof AuthenticatedSetoranRoute
+  '/tasmi': typeof AuthenticatedTasmiRoute
   '/ujian': typeof AuthenticatedUjianRouteWithChildren
   '/santri/$id': typeof AuthenticatedSantriIdRoute
   '/ujian/$id': typeof AuthenticatedUjianIdRoute
@@ -119,6 +127,7 @@ export interface FileRoutesById {
   '/_authenticated/pengaturan': typeof AuthenticatedPengaturanRoute
   '/_authenticated/santri': typeof AuthenticatedSantriRouteWithChildren
   '/_authenticated/setoran': typeof AuthenticatedSetoranRoute
+  '/_authenticated/tasmi': typeof AuthenticatedTasmiRoute
   '/_authenticated/ujian': typeof AuthenticatedUjianRouteWithChildren
   '/_authenticated/santri/$id': typeof AuthenticatedSantriIdRoute
   '/_authenticated/ujian/$id': typeof AuthenticatedUjianIdRoute
@@ -134,6 +143,7 @@ export interface FileRouteTypes {
     | '/pengaturan'
     | '/santri'
     | '/setoran'
+    | '/tasmi'
     | '/ujian'
     | '/santri/$id'
     | '/ujian/$id'
@@ -147,6 +157,7 @@ export interface FileRouteTypes {
     | '/pengaturan'
     | '/santri'
     | '/setoran'
+    | '/tasmi'
     | '/ujian'
     | '/santri/$id'
     | '/ujian/$id'
@@ -161,6 +172,7 @@ export interface FileRouteTypes {
     | '/_authenticated/pengaturan'
     | '/_authenticated/santri'
     | '/_authenticated/setoran'
+    | '/_authenticated/tasmi'
     | '/_authenticated/ujian'
     | '/_authenticated/santri/$id'
     | '/_authenticated/ujian/$id'
@@ -200,6 +212,13 @@ declare module '@tanstack/react-router' {
       path: '/ujian'
       fullPath: '/ujian'
       preLoaderRoute: typeof AuthenticatedUjianRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/tasmi': {
+      id: '/_authenticated/tasmi'
+      path: '/tasmi'
+      fullPath: '/tasmi'
+      preLoaderRoute: typeof AuthenticatedTasmiRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/setoran': {
@@ -290,6 +309,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedPengaturanRoute: typeof AuthenticatedPengaturanRoute
   AuthenticatedSantriRoute: typeof AuthenticatedSantriRouteWithChildren
   AuthenticatedSetoranRoute: typeof AuthenticatedSetoranRoute
+  AuthenticatedTasmiRoute: typeof AuthenticatedTasmiRoute
   AuthenticatedUjianRoute: typeof AuthenticatedUjianRouteWithChildren
 }
 
@@ -300,6 +320,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedPengaturanRoute: AuthenticatedPengaturanRoute,
   AuthenticatedSantriRoute: AuthenticatedSantriRouteWithChildren,
   AuthenticatedSetoranRoute: AuthenticatedSetoranRoute,
+  AuthenticatedTasmiRoute: AuthenticatedTasmiRoute,
   AuthenticatedUjianRoute: AuthenticatedUjianRouteWithChildren,
 }
 

@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import { BookOpen, GraduationCap, LineChart, Users, ClipboardCheck, ShieldCheck } from "lucide-react";
+import logoSaqu from "@/assets/logo-saqu.png.asset.json";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -32,7 +33,7 @@ function Landing() {
       <header className="sticky top-0 z-20 bg-background/80 backdrop-blur border-b">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
           <div className="flex items-center gap-2 font-display text-xl font-extrabold">
-            <div className="grid h-9 w-9 place-items-center rounded-xl bg-leaf text-leaf-foreground">📖</div>
+            <img src={logoSaqu.url} alt="SAQU" className="h-10 w-10 object-contain" />
             SAQU Tahfidz
           </div>
           <nav className="flex items-center gap-2">

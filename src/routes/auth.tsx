@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
+import logoSaqu from "@/assets/logo-saqu.png.asset.json";
 
 export const Route = createFileRoute("/auth")({
   head: () => ({
@@ -65,7 +66,7 @@ function AuthPage() {
     <div className="min-h-screen gradient-hero flex items-center justify-center px-4 py-10">
       <Card className="w-full max-w-md card-fun">
         <CardHeader className="text-center">
-          <Link to="/" className="mx-auto grid h-14 w-14 place-items-center rounded-2xl bg-leaf text-2xl">📖</Link>
+          <Link to="/" className="mx-auto block h-16 w-16"><img src={logoSaqu.url} alt="SAQU" className="h-16 w-16 object-contain" /></Link>
           <CardTitle className="mt-2 font-display text-2xl">SAQU Tahfidz</CardTitle>
           <p className="text-sm text-muted-foreground">Masuk untuk mengakses aplikasi mutaba'ah</p>
         </CardHeader>

@@ -12,31 +12,29 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { SURAHS } from "@/lib/quran";
 import { useState } from "react";
 import { toast } from "sonner";
+import { MushafViewer } from "@/components/MushafViewer";
 
 export const Route = createFileRoute("/_authenticated/setoran")({
   head: () => ({ meta: [{ title: "Setoran Hafalan — SAQU Tahfidz" }] }),
   component: SetoranPage,
 });
 
-type Jenis = "ziyadah" | "murojaah" | "tasmi";
-const TABLE: Record<Jenis, string> = { ziyadah: "ziyadah_entries", murojaah: "murojaah_entries", tasmi: "tasmi_entries" };
+type Jenis = "ziyadah" | "murojaah";
 
 function SetoranPage() {
   return (
     <div className="space-y-6">
       <div>
         <h1 className="font-display text-3xl font-extrabold">Setoran Hafalan</h1>
-        <p className="text-muted-foreground">Input dan lihat riwayat ziyadah, muroja'ah, dan tasmi' santri.</p>
+        <p className="text-muted-foreground">Catat ziyadah dan muroja'ah santri sambil membuka mushaf digital.</p>
       </div>
       <Tabs defaultValue="ziyadah">
         <TabsList className="rounded-xl">
           <TabsTrigger value="ziyadah">Ziyadah</TabsTrigger>
           <TabsTrigger value="murojaah">Muroja'ah</TabsTrigger>
-          <TabsTrigger value="tasmi">Tasmi'</TabsTrigger>
         </TabsList>
         <TabsContent value="ziyadah"><SetoranForm jenis="ziyadah" /></TabsContent>
         <TabsContent value="murojaah"><SetoranForm jenis="murojaah" /></TabsContent>
-        <TabsContent value="tasmi"><SetoranForm jenis="tasmi" /></TabsContent>
       </Tabs>
     </div>
   );
@@ -45,37 +43,67 @@ function SetoranPage() {
 function SetoranForm({ jenis }: { jenis: Jenis }) {
   const qc = useQueryClient();
   const { user } = useSession();
-  const [form, setForm] = useState<any>({ student_id: "", date: new Date().toISOString().slice(0, 10), surah: "Al-Fatihah", surah_from: "Al-Fatihah", surah_to: "", ayat_from: 1, ayat_to: 7, juz: 1, score: 85, status: "lancar", notes: "" });
+  const [form, setForm] = useState<any>({
+    student_id: "",
+    date: new Date().toISOString().slice(0, 10),
+    surah: "Al-Fatihah",
+    surah_from: "Al-Fatihah",
+    surah_to: "",
+    ayat_from: 1,
+    ayat_to: 7,
+    juz: 1,
+    score: 85,
+    status: "lancar",
+    murojaah_type: "lama",
+    notes: "",
+  });
 
   const { data: santri } = useQuery({
     queryKey: ["students-list"],
     queryFn: async () => (await supabase.from("students").select("id, full_name, nis").order("full_name")).data ?? [],
   });
-  const { data: rows } = useQuery({
-    queryKey: ["setoran", jenis],
-    queryFn: async () => (await supabase.from(TABLE[jenis] as any).select("*, students(full_name)").order("date", { ascending: false }).limit(50)).data ?? [],
-  });
+
+  const table = jenis === "ziyadah" ? "ziyadah_entries" : "murojaah_entries";
 
   const add = useMutation({
     mutationFn: async () => {
       if (!form.student_id) throw new Error("Pilih santri dulu");
-      const payload: any = { ...form, teacher_id: user!.id };
+      const base: any = {
+        student_id: form.student_id,
+        teacher_id: user!.id,
+        date: form.date,
+        juz: form.juz,
+        score: form.score,
+        status: form.status,
+        notes: form.notes,
+      };
       if (jenis === "ziyadah") {
-        delete payload.surah_from; delete payload.surah_to;
+        Object.assign(base, { surah: form.surah, ayat_from: form.ayat_from, ayat_to: form.ayat_to });
       } else {
-        delete payload.surah; delete payload.ayat_from; delete payload.ayat_to;
+        Object.assign(base, {
+          surah_from: form.surah_from,
+          surah_to: form.surah_to || null,
+          murojaah_type: form.murojaah_type,
+        });
       }
-      const { error } = await supabase.from(TABLE[jenis] as any).insert(payload);
+      const { error } = await supabase.from(table as any).insert(base);
       if (error) throw error;
     },
-    onSuccess: () => { toast.success("Setoran disimpan"); qc.invalidateQueries({ queryKey: ["setoran", jenis] }); },
+    onSuccess: () => {
+      toast.success("Setoran disimpan");
+      qc.invalidateQueries({ queryKey: ["setoran-history"] });
+    },
     onError: (e: any) => toast.error(e.message),
   });
 
   return (
     <div className="grid gap-6 lg:grid-cols-5">
       <Card className="card-fun lg:col-span-2">
-        <CardHeader><CardTitle className="capitalize">Tambah {jenis === "tasmi" ? "Tasmi'" : jenis === "murojaah" ? "Muroja'ah" : "Ziyadah"}</CardTitle></CardHeader>
+        <CardHeader>
+          <CardTitle className="capitalize">
+            Tambah {jenis === "murojaah" ? "Muroja'ah" : "Ziyadah"}
+          </CardTitle>
+        </CardHeader>
         <CardContent className="space-y-3">
           <div>
             <Label>Santri</Label>
@@ -102,6 +130,16 @@ function SetoranForm({ jenis }: { jenis: Jenis }) {
             </>
           ) : (
             <>
+              <div>
+                <Label>Jenis Muroja'ah</Label>
+                <Select value={form.murojaah_type} onValueChange={(v) => setForm({ ...form, murojaah_type: v })}>
+                  <SelectTrigger><SelectValue /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="lama">Muroja'ah Lama</SelectItem>
+                    <SelectItem value="baru">Muroja'ah Baru</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
               <div className="grid grid-cols-2 gap-2">
                 <div>
                   <Label>Surah dari</Label>
@@ -142,31 +180,9 @@ function SetoranForm({ jenis }: { jenis: Jenis }) {
       </Card>
 
       <Card className="card-fun lg:col-span-3">
-        <CardHeader><CardTitle>Riwayat Setoran</CardTitle></CardHeader>
+        <CardHeader><CardTitle>Mushaf Al-Qur'an Digital</CardTitle></CardHeader>
         <CardContent>
-          {(rows ?? []).length === 0 ? <p className="text-sm text-muted-foreground">Belum ada data.</p> : (
-            <div className="overflow-x-auto">
-              <table className="w-full text-sm">
-                <thead className="text-left text-xs uppercase text-muted-foreground border-b">
-                  <tr><th className="py-2 pr-2">Tgl</th><th>Santri</th><th>Materi</th><th>Nilai</th><th>Status</th></tr>
-                </thead>
-                <tbody>
-                  {(rows ?? []).map((r: any) => (
-                    <tr key={r.id} className="border-b last:border-0">
-                      <td className="py-2 pr-2 whitespace-nowrap">{r.date}</td>
-                      <td className="font-semibold">{r.students?.full_name}</td>
-                      <td className="text-xs">
-                        {jenis === "ziyadah" ? `${r.surah} ${r.ayat_from}-${r.ayat_to}` : `${r.surah_from}${r.surah_to ? " – " + r.surah_to : ""}`}
-                        {r.juz ? ` · Juz ${r.juz}` : ""}
-                      </td>
-                      <td><span className="rounded-full bg-leaf/20 px-2 py-0.5 text-xs font-bold text-leaf">{r.score ?? "-"}</span></td>
-                      <td className="text-xs capitalize">{r.status.replace("_", " ")}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          )}
+          <MushafViewer />
         </CardContent>
       </Card>
     </div>
