@@ -2,10 +2,11 @@ import { createFileRoute, redirect, Outlet, Link, useNavigate, useRouterState } 
 import { supabase } from "@/integrations/supabase/client";
 import { useSession, useRoles, useIsAdmin } from "@/lib/use-auth";
 import { Button } from "@/components/ui/button";
-import { LayoutDashboard, Users, BookOpen, GraduationCap, CalendarCheck, FileBarChart, Settings, LogOut, Menu } from "lucide-react";
+import { LayoutDashboard, Users, BookOpen, Mic, GraduationCap, CalendarCheck, FileBarChart, Settings, LogOut, Menu } from "lucide-react";
 import { useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { cn } from "@/lib/utils";
+import logoSaqu from "@/assets/logo-saqu.png.asset.json";
 
 export const Route = createFileRoute("/_authenticated")({
   ssr: false,
@@ -21,6 +22,7 @@ const NAV = [
   { to: "/dashboard", icon: LayoutDashboard, label: "Dashboard" },
   { to: "/santri", icon: Users, label: "Santri" },
   { to: "/setoran", icon: BookOpen, label: "Setoran" },
+  { to: "/tasmi", icon: Mic, label: "Tasmi'" },
   { to: "/ujian", icon: GraduationCap, label: "Ujian Tahfidz" },
   { to: "/halaqoh", icon: CalendarCheck, label: "Halaqoh & Absensi" },
   { to: "/laporan", icon: FileBarChart, label: "Laporan" },
@@ -69,7 +71,7 @@ function AuthedLayout() {
       {/* Sidebar desktop */}
       <aside className="fixed inset-y-0 left-0 hidden w-64 flex-col border-r bg-sidebar p-4 md:flex">
         <Link to="/dashboard" className="mb-6 flex items-center gap-2 font-display text-lg font-extrabold">
-          <div className="grid h-9 w-9 place-items-center rounded-xl bg-leaf">📖</div>
+          <img src={logoSaqu.url} alt="SAQU" className="h-10 w-10 object-contain" />
           SAQU Tahfidz
         </Link>
         <nav className="flex flex-col gap-1"><NavItems /></nav>
@@ -88,7 +90,7 @@ function AuthedLayout() {
 
       {/* Mobile top bar */}
       <header className="sticky top-0 z-20 flex items-center justify-between border-b bg-background/80 px-4 py-3 backdrop-blur md:hidden">
-        <Link to="/dashboard" className="font-display text-lg font-extrabold">📖 SAQU</Link>
+        <Link to="/dashboard" className="flex items-center gap-2 font-display text-lg font-extrabold"><img src={logoSaqu.url} alt="SAQU" className="h-8 w-8 object-contain" />SAQU</Link>
         <Button variant="ghost" size="icon" onClick={() => setOpen(!open)}><Menu /></Button>
       </header>
       {open && (
