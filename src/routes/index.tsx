@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import { BookOpen, GraduationCap, LineChart, Users, ClipboardCheck, ShieldCheck } from "lucide-react";
+import logoSaqu from "@/assets/logo-saqu.png.asset.json";
 
 export const Route = createFileRoute("/")({
   head: () => ({
