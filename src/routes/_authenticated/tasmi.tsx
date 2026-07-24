@@ -12,6 +12,7 @@ import { SURAHS } from "@/lib/quran";
 import { useState } from "react";
 import { toast } from "sonner";
 import { Mic } from "lucide-react";
+import { MushafViewer } from "@/components/MushafViewer";
 
 export const Route = createFileRoute("/_authenticated/tasmi")({
   head: () => ({ meta: [{ title: "Tasmi' — SAQU Tahfidz" }] }),
