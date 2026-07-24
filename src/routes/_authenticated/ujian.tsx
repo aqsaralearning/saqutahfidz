@@ -142,7 +142,6 @@ function pickRandom<T>(arr: T[], n: number, exclude?: T): T[] {
 
 function SambungAyatGame() {
   const [juz, setJuz] = useState<number>(30);
-  const pool = useMemo(() => SURAHS.filter((s) => s.juzStart >= juz - 1 && s.juzStart <= juz + 1), [juz]);
   const [q, setQ] = useState(() => makeSambung(SURAHS.filter((s) => s.juzStart === 30)));
   const [picked, setPicked] = useState<string | null>(null);
   const [score, setScore] = useState({ benar: 0, salah: 0 });
