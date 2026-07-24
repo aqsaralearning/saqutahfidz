@@ -135,10 +135,10 @@ export function juzPageRange(juz: number): [number, number] {
   return [start, end];
 }
 
-/** URL gambar mushaf per halaman (sumber publik, format standar Madinah) */
+/** URL gambar mushaf per halaman — file lokal di public/mushaf/ */
 export function mushafPageUrl(page: number): string {
   const p = String(page).padStart(3, "0");
-  return `https://www.searchtruth.com/quran/images1/${p}.jpg`;
+  return `/mushaf/page-${p}.webp`;
 }
 
 export function predicateFromScore(score: number): { key: string; label: string } {
