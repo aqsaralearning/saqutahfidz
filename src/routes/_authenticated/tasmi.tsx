@@ -170,6 +170,12 @@ function TasmiPage() {
           </CardContent>
         </Card>
       </div>
+
+      <Card className="card-fun">
+        <CardHeader><CardTitle>Mushaf Al-Qur'an Digital</CardTitle></CardHeader>
+        <CardContent><MushafViewer /></CardContent>
+      </Card>
     </div>
   );
 }
+
