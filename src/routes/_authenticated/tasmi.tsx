@@ -12,6 +12,7 @@ import { SURAHS } from "@/lib/quran";
 import { useState } from "react";
 import { toast } from "sonner";
 import { Mic } from "lucide-react";
+import { MushafViewer } from "@/components/MushafViewer";
 
 export const Route = createFileRoute("/_authenticated/tasmi")({
   head: () => ({ meta: [{ title: "Tasmi' — SAQU Tahfidz" }] }),
@@ -169,6 +170,12 @@ function TasmiPage() {
           </CardContent>
         </Card>
       </div>
+
+      <Card className="card-fun">
+        <CardHeader><CardTitle>Mushaf Al-Qur'an Digital</CardTitle></CardHeader>
+        <CardContent><MushafViewer /></CardContent>
+      </Card>
     </div>
   );
 }
+
