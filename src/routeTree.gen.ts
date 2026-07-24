@@ -22,6 +22,7 @@ import { Route as AuthenticatedHalaqohRouteImport } from './routes/_authenticate
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedUjianIdRouteImport } from './routes/_authenticated/ujian.$id'
 import { Route as AuthenticatedSantriIdRouteImport } from './routes/_authenticated/santri.$id'
+import { Route as DotlovableOauthConsentRouteImport } from './routes/[.]lovable.oauth.consent'
 
 const AuthRoute = AuthRouteImport.update({
   id: '/auth',
@@ -87,6 +88,11 @@ const AuthenticatedSantriIdRoute = AuthenticatedSantriIdRouteImport.update({
   path: '/$id',
   getParentRoute: () => AuthenticatedSantriRoute,
 } as any)
+const DotlovableOauthConsentRoute = DotlovableOauthConsentRouteImport.update({
+  id: '/.lovable/oauth/consent',
+  path: '/.lovable/oauth/consent',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -99,6 +105,7 @@ export interface FileRoutesByFullPath {
   '/setoran': typeof AuthenticatedSetoranRoute
   '/tasmi': typeof AuthenticatedTasmiRoute
   '/ujian': typeof AuthenticatedUjianRouteWithChildren
+  '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/santri/$id': typeof AuthenticatedSantriIdRoute
   '/ujian/$id': typeof AuthenticatedUjianIdRoute
 }
@@ -113,6 +120,7 @@ export interface FileRoutesByTo {
   '/setoran': typeof AuthenticatedSetoranRoute
   '/tasmi': typeof AuthenticatedTasmiRoute
   '/ujian': typeof AuthenticatedUjianRouteWithChildren
+  '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/santri/$id': typeof AuthenticatedSantriIdRoute
   '/ujian/$id': typeof AuthenticatedUjianIdRoute
 }
@@ -129,6 +137,7 @@ export interface FileRoutesById {
   '/_authenticated/setoran': typeof AuthenticatedSetoranRoute
   '/_authenticated/tasmi': typeof AuthenticatedTasmiRoute
   '/_authenticated/ujian': typeof AuthenticatedUjianRouteWithChildren
+  '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/_authenticated/santri/$id': typeof AuthenticatedSantriIdRoute
   '/_authenticated/ujian/$id': typeof AuthenticatedUjianIdRoute
 }
@@ -145,6 +154,7 @@ export interface FileRouteTypes {
     | '/setoran'
     | '/tasmi'
     | '/ujian'
+    | '/.lovable/oauth/consent'
     | '/santri/$id'
     | '/ujian/$id'
   fileRoutesByTo: FileRoutesByTo
@@ -159,6 +169,7 @@ export interface FileRouteTypes {
     | '/setoran'
     | '/tasmi'
     | '/ujian'
+    | '/.lovable/oauth/consent'
     | '/santri/$id'
     | '/ujian/$id'
   id:
@@ -174,6 +185,7 @@ export interface FileRouteTypes {
     | '/_authenticated/setoran'
     | '/_authenticated/tasmi'
     | '/_authenticated/ujian'
+    | '/.lovable/oauth/consent'
     | '/_authenticated/santri/$id'
     | '/_authenticated/ujian/$id'
   fileRoutesById: FileRoutesById
@@ -182,6 +194,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AuthRoute: typeof AuthRoute
+  DotlovableOauthConsentRoute: typeof DotlovableOauthConsentRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -277,6 +290,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedSantriIdRouteImport
       parentRoute: typeof AuthenticatedSantriRoute
     }
+    '/.lovable/oauth/consent': {
+      id: '/.lovable/oauth/consent'
+      path: '/.lovable/oauth/consent'
+      fullPath: '/.lovable/oauth/consent'
+      preLoaderRoute: typeof DotlovableOauthConsentRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -331,6 +351,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AuthRoute: AuthRoute,
+  DotlovableOauthConsentRoute: DotlovableOauthConsentRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
