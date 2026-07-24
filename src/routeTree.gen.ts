@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as McpRouteImport } from './routes/mcp'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
@@ -20,9 +21,18 @@ import { Route as AuthenticatedPengaturanRouteImport } from './routes/_authentic
 import { Route as AuthenticatedLaporanRouteImport } from './routes/_authenticated/laporan'
 import { Route as AuthenticatedHalaqohRouteImport } from './routes/_authenticated/halaqoh'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
+import { Route as Char91DotwellKnownChar93OauthProtectedResourceRouteImport } from './routes/[.well-known]/oauth-protected-resource'
+import { Route as Char91DotmcpChar93ListToolsRouteImport } from './routes/[.mcp]/list-tools'
 import { Route as AuthenticatedUjianIdRouteImport } from './routes/_authenticated/ujian.$id'
 import { Route as AuthenticatedSantriIdRouteImport } from './routes/_authenticated/santri.$id'
+import { Route as Char91DotmcpChar93InvokeToolToolRouteImport } from './routes/[.mcp]/invoke-tool/$tool'
+import { Route as DotlovableOauthConsentRouteImport } from './routes/[.]lovable.oauth.consent'
 
+const McpRoute = McpRouteImport.update({
+  id: '/mcp',
+  path: '/mcp',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthRoute = AuthRouteImport.update({
   id: '/auth',
   path: '/auth',
@@ -77,6 +87,18 @@ const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
   path: '/dashboard',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const Char91DotwellKnownChar93OauthProtectedResourceRoute =
+  Char91DotwellKnownChar93OauthProtectedResourceRouteImport.update({
+    id: '/.well-known/oauth-protected-resource',
+    path: '/.well-known/oauth-protected-resource',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const Char91DotmcpChar93ListToolsRoute =
+  Char91DotmcpChar93ListToolsRouteImport.update({
+    id: '/.mcp/list-tools',
+    path: '/.mcp/list-tools',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const AuthenticatedUjianIdRoute = AuthenticatedUjianIdRouteImport.update({
   id: '/$id',
   path: '/$id',
@@ -87,10 +109,24 @@ const AuthenticatedSantriIdRoute = AuthenticatedSantriIdRouteImport.update({
   path: '/$id',
   getParentRoute: () => AuthenticatedSantriRoute,
 } as any)
+const Char91DotmcpChar93InvokeToolToolRoute =
+  Char91DotmcpChar93InvokeToolToolRouteImport.update({
+    id: '/.mcp/invoke-tool/$tool',
+    path: '/.mcp/invoke-tool/$tool',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const DotlovableOauthConsentRoute = DotlovableOauthConsentRouteImport.update({
+  id: '/.lovable/oauth/consent',
+  path: '/.lovable/oauth/consent',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/mcp': typeof McpRoute
+  '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
+  '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/halaqoh': typeof AuthenticatedHalaqohRoute
   '/laporan': typeof AuthenticatedLaporanRoute
@@ -99,12 +135,17 @@ export interface FileRoutesByFullPath {
   '/setoran': typeof AuthenticatedSetoranRoute
   '/tasmi': typeof AuthenticatedTasmiRoute
   '/ujian': typeof AuthenticatedUjianRouteWithChildren
+  '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
+  '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/santri/$id': typeof AuthenticatedSantriIdRoute
   '/ujian/$id': typeof AuthenticatedUjianIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/mcp': typeof McpRoute
+  '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
+  '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/halaqoh': typeof AuthenticatedHalaqohRoute
   '/laporan': typeof AuthenticatedLaporanRoute
@@ -113,6 +154,8 @@ export interface FileRoutesByTo {
   '/setoran': typeof AuthenticatedSetoranRoute
   '/tasmi': typeof AuthenticatedTasmiRoute
   '/ujian': typeof AuthenticatedUjianRouteWithChildren
+  '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
+  '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/santri/$id': typeof AuthenticatedSantriIdRoute
   '/ujian/$id': typeof AuthenticatedUjianIdRoute
 }
@@ -121,6 +164,9 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/auth': typeof AuthRoute
+  '/mcp': typeof McpRoute
+  '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
+  '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/halaqoh': typeof AuthenticatedHalaqohRoute
   '/_authenticated/laporan': typeof AuthenticatedLaporanRoute
@@ -129,6 +175,8 @@ export interface FileRoutesById {
   '/_authenticated/setoran': typeof AuthenticatedSetoranRoute
   '/_authenticated/tasmi': typeof AuthenticatedTasmiRoute
   '/_authenticated/ujian': typeof AuthenticatedUjianRouteWithChildren
+  '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
+  '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/_authenticated/santri/$id': typeof AuthenticatedSantriIdRoute
   '/_authenticated/ujian/$id': typeof AuthenticatedUjianIdRoute
 }
@@ -137,6 +185,9 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/auth'
+    | '/mcp'
+    | '/.mcp/list-tools'
+    | '/.well-known/oauth-protected-resource'
     | '/dashboard'
     | '/halaqoh'
     | '/laporan'
@@ -145,12 +196,17 @@ export interface FileRouteTypes {
     | '/setoran'
     | '/tasmi'
     | '/ujian'
+    | '/.lovable/oauth/consent'
+    | '/.mcp/invoke-tool/$tool'
     | '/santri/$id'
     | '/ujian/$id'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/auth'
+    | '/mcp'
+    | '/.mcp/list-tools'
+    | '/.well-known/oauth-protected-resource'
     | '/dashboard'
     | '/halaqoh'
     | '/laporan'
@@ -159,6 +215,8 @@ export interface FileRouteTypes {
     | '/setoran'
     | '/tasmi'
     | '/ujian'
+    | '/.lovable/oauth/consent'
+    | '/.mcp/invoke-tool/$tool'
     | '/santri/$id'
     | '/ujian/$id'
   id:
@@ -166,6 +224,9 @@ export interface FileRouteTypes {
     | '/'
     | '/_authenticated'
     | '/auth'
+    | '/mcp'
+    | '/.mcp/list-tools'
+    | '/.well-known/oauth-protected-resource'
     | '/_authenticated/dashboard'
     | '/_authenticated/halaqoh'
     | '/_authenticated/laporan'
@@ -174,6 +235,8 @@ export interface FileRouteTypes {
     | '/_authenticated/setoran'
     | '/_authenticated/tasmi'
     | '/_authenticated/ujian'
+    | '/.lovable/oauth/consent'
+    | '/.mcp/invoke-tool/$tool'
     | '/_authenticated/santri/$id'
     | '/_authenticated/ujian/$id'
   fileRoutesById: FileRoutesById
@@ -182,10 +245,22 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AuthRoute: typeof AuthRoute
+  McpRoute: typeof McpRoute
+  Char91DotmcpChar93ListToolsRoute: typeof Char91DotmcpChar93ListToolsRoute
+  Char91DotwellKnownChar93OauthProtectedResourceRoute: typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
+  DotlovableOauthConsentRoute: typeof DotlovableOauthConsentRoute
+  Char91DotmcpChar93InvokeToolToolRoute: typeof Char91DotmcpChar93InvokeToolToolRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/mcp': {
+      id: '/mcp'
+      path: '/mcp'
+      fullPath: '/mcp'
+      preLoaderRoute: typeof McpRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/auth': {
       id: '/auth'
       path: '/auth'
@@ -263,6 +338,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDashboardRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/.well-known/oauth-protected-resource': {
+      id: '/.well-known/oauth-protected-resource'
+      path: '/.well-known/oauth-protected-resource'
+      fullPath: '/.well-known/oauth-protected-resource'
+      preLoaderRoute: typeof Char91DotwellKnownChar93OauthProtectedResourceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/.mcp/list-tools': {
+      id: '/.mcp/list-tools'
+      path: '/.mcp/list-tools'
+      fullPath: '/.mcp/list-tools'
+      preLoaderRoute: typeof Char91DotmcpChar93ListToolsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_authenticated/ujian/$id': {
       id: '/_authenticated/ujian/$id'
       path: '/$id'
@@ -276,6 +365,20 @@ declare module '@tanstack/react-router' {
       fullPath: '/santri/$id'
       preLoaderRoute: typeof AuthenticatedSantriIdRouteImport
       parentRoute: typeof AuthenticatedSantriRoute
+    }
+    '/.mcp/invoke-tool/$tool': {
+      id: '/.mcp/invoke-tool/$tool'
+      path: '/.mcp/invoke-tool/$tool'
+      fullPath: '/.mcp/invoke-tool/$tool'
+      preLoaderRoute: typeof Char91DotmcpChar93InvokeToolToolRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/.lovable/oauth/consent': {
+      id: '/.lovable/oauth/consent'
+      path: '/.lovable/oauth/consent'
+      fullPath: '/.lovable/oauth/consent'
+      preLoaderRoute: typeof DotlovableOauthConsentRouteImport
+      parentRoute: typeof rootRouteImport
     }
   }
 }
@@ -331,7 +434,23 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AuthRoute: AuthRoute,
+  McpRoute: McpRoute,
+  Char91DotmcpChar93ListToolsRoute: Char91DotmcpChar93ListToolsRoute,
+  Char91DotwellKnownChar93OauthProtectedResourceRoute:
+    Char91DotwellKnownChar93OauthProtectedResourceRoute,
+  DotlovableOauthConsentRoute: DotlovableOauthConsentRoute,
+  Char91DotmcpChar93InvokeToolToolRoute: Char91DotmcpChar93InvokeToolToolRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}

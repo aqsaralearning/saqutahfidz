@@ -11,6 +11,9 @@ import { toast } from "sonner";
 import logoSaqu from "@/assets/logo-saqu.png.asset.json";
 
 export const Route = createFileRoute("/auth")({
+  validateSearch: (s: Record<string, unknown>) => ({
+    next: typeof s.next === "string" && s.next.startsWith("/") && !s.next.startsWith("//") ? s.next : "",
+  }),
   head: () => ({
     meta: [
       { title: "Masuk — SAQU Mutaba'ah Tahfidz" },
@@ -25,16 +28,23 @@ export const Route = createFileRoute("/auth")({
 
 function AuthPage() {
   const nav = useNavigate();
+  const { next } = Route.useSearch();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
   const [loading, setLoading] = useState(false);
 
+  const goNext = () => {
+    if (next) window.location.href = next;
+    else nav({ to: "/dashboard" });
+  };
+
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => {
-      if (data.session) nav({ to: "/dashboard" });
+      if (data.session) goNext();
     });
-  }, [nav]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const signIn = async () => {
     setLoading(true);
@@ -42,14 +52,15 @@ function AuthPage() {
     setLoading(false);
     if (error) return toast.error(error.message);
     toast.success("Berhasil masuk");
-    nav({ to: "/dashboard" });
+    goNext();
   };
 
   const signUp = async () => {
     setLoading(true);
+    const emailRedirectTo = next ? window.location.origin + next : window.location.origin;
     const { error } = await supabase.auth.signUp({
       email, password,
-      options: { emailRedirectTo: window.location.origin, data: { full_name: name } },
+      options: { emailRedirectTo, data: { full_name: name } },
     });
     setLoading(false);
     if (error) return toast.error(error.message);
@@ -57,10 +68,12 @@ function AuthPage() {
   };
 
   const google = async () => {
-    const r = await lovable.auth.signInWithOAuth("google", { redirect_uri: window.location.origin });
+    const redirect_uri = next ? window.location.origin + next : window.location.origin;
+    const r = await lovable.auth.signInWithOAuth("google", { redirect_uri });
     if (r.error) toast.error(r.error.message);
-    else if (!r.redirected) nav({ to: "/dashboard" });
+    else if (!r.redirected) goNext();
   };
+
 
   return (
     <div className="min-h-screen gradient-hero flex items-center justify-center px-4 py-10">

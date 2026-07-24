@@ -1,0 +1,141 @@
+{
+  "version": 1,
+  "sdk_version": "0.24.0",
+  "path": "/mcp",
+  "auth": {
+    "type": "oauth",
+    "issuer": "https://aivssdhhwxfgmaoatkyd.supabase.co/auth/v1",
+    "accepted_audiences": [
+      "authenticated"
+    ]
+  },
+  "mcp": {
+    "server": {
+      "name": "saqu-tahfidz-mcp",
+      "version": "0.1.0",
+      "title": "SAQU Mutaba'ah Tahfidz"
+    },
+    "tools": [
+      {
+        "name": "list_santri",
+        "title": "Daftar santri",
+        "description": "Daftar santri yang dapat diakses oleh pengguna yang sedang login (dibatasi oleh RLS: admin melihat semua, musyrif melihat santri di halaqoh-nya, wali melihat anaknya).",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "search": {
+              "type": "string",
+              "description": "Cari berdasarkan nama santri."
+            },
+            "limit": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 200,
+              "description": "Jumlah baris maksimum (default 50)."
+            }
+          },
+          "additionalProperties": false,
+          "$schema": "http://json-schema.org/draft-07/schema#"
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "santri_progress",
+        "title": "Rekap progres santri",
+        "description": "Rekap ringkas hafalan untuk satu santri: ziyadah, muroja'ah, dan tasmi' terbaru. Dibatasi oleh RLS.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "student_id": {
+              "type": "string",
+              "format": "uuid",
+              "description": "UUID santri (dari list_santri)."
+            },
+            "days": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 365,
+              "description": "Jendela hari terakhir (default 30)."
+            }
+          },
+          "required": [
+            "student_id"
+          ],
+          "additionalProperties": false,
+          "$schema": "http://json-schema.org/draft-07/schema#"
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "log_ziyadah",
+        "title": "Catat setoran ziyadah",
+        "description": "Tambah satu entri ziyadah untuk santri. Musyrif hanya bisa mencatat untuk santrinya sendiri (RLS).",
+        "annotations": {
+          "readOnlyHint": false,
+          "destructiveHint": false,
+          "idempotentHint": false,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "student_id": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "date": {
+              "type": "string",
+              "description": "YYYY-MM-DD"
+            },
+            "surah_start": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 114
+            },
+            "ayah_start": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "surah_end": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 114
+            },
+            "ayah_end": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "predicate": {
+              "type": "string",
+              "description": "mumtaz | jayyid_jiddan | jayyid | maqbul"
+            },
+            "notes": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "student_id",
+            "date",
+            "surah_start",
+            "ayah_start",
+            "surah_end",
+            "ayah_end"
+          ],
+          "additionalProperties": false,
+          "$schema": "http://json-schema.org/draft-07/schema#"
+        },
+        "outputSchema": null
+      }
+    ]
+  }
+}
