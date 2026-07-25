@@ -142,38 +142,38 @@ function TasmiPage() {
         </Card>
 
         <Card className="card-fun lg:col-span-3">
-          <CardHeader><CardTitle>Riwayat Tasmi'</CardTitle></CardHeader>
-          <CardContent>
-            {(rows ?? []).length === 0 ? <p className="text-sm text-muted-foreground">Belum ada tasmi'.</p> : (
-              <div className="overflow-x-auto">
-                <table className="w-full text-sm">
-                  <thead className="text-left text-xs uppercase text-muted-foreground border-b">
-                    <tr><th className="py-2 pr-2">Tgl</th><th>Santri</th><th>Jenis</th><th>Materi</th><th>Nilai</th></tr>
-                  </thead>
-                  <tbody>
-                    {(rows ?? []).map((r: any) => {
-                      const t = TASMI_TYPES.find((x) => x.key === r.tasmi_type);
-                      return (
-                        <tr key={r.id} className="border-b last:border-0">
-                          <td className="py-2 pr-2 whitespace-nowrap">{r.date}</td>
-                          <td className="font-semibold">{r.students?.full_name}</td>
-                          <td><span className="rounded-full bg-sun/30 px-2 py-0.5 text-[10px] font-bold uppercase">{t?.short ?? r.tasmi_type}</span></td>
-                          <td className="text-xs">{r.surah_from}{r.surah_to ? ` – ${r.surah_to}` : ""}{r.juz ? ` · Juz ${r.juz}` : ""}</td>
-                          <td><span className="rounded-full bg-leaf/20 px-2 py-0.5 text-xs font-bold text-leaf">{r.score ?? "-"}</span></td>
-                        </tr>
-                      );
-                    })}
-                  </tbody>
-                </table>
-              </div>
-            )}
-          </CardContent>
+          <CardHeader><CardTitle>Mushaf Al-Qur'an Digital</CardTitle></CardHeader>
+          <CardContent><MushafViewer /></CardContent>
         </Card>
       </div>
 
       <Card className="card-fun">
-        <CardHeader><CardTitle>Mushaf Al-Qur'an Digital</CardTitle></CardHeader>
-        <CardContent><MushafViewer /></CardContent>
+        <CardHeader><CardTitle>Riwayat Tasmi'</CardTitle></CardHeader>
+        <CardContent>
+          {(rows ?? []).length === 0 ? <p className="text-sm text-muted-foreground">Belum ada tasmi'.</p> : (
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead className="text-left text-xs uppercase text-muted-foreground border-b">
+                  <tr><th className="py-2 pr-2">Tgl</th><th>Santri</th><th>Jenis</th><th>Materi</th><th>Nilai</th></tr>
+                </thead>
+                <tbody>
+                  {(rows ?? []).map((r: any) => {
+                    const t = TASMI_TYPES.find((x) => x.key === r.tasmi_type);
+                    return (
+                      <tr key={r.id} className="border-b last:border-0">
+                        <td className="py-2 pr-2 whitespace-nowrap">{r.date}</td>
+                        <td className="font-semibold">{r.students?.full_name}</td>
+                        <td><span className="rounded-full bg-sun/30 px-2 py-0.5 text-[10px] font-bold uppercase">{t?.short ?? r.tasmi_type}</span></td>
+                        <td className="text-xs">{r.surah_from}{r.surah_to ? ` – ${r.surah_to}` : ""}{r.juz ? ` · Juz ${r.juz}` : ""}</td>
+                        <td><span className="rounded-full bg-leaf/20 px-2 py-0.5 text-xs font-bold text-leaf">{r.score ?? "-"}</span></td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </CardContent>
       </Card>
     </div>
   );
