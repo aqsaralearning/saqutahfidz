@@ -13,6 +13,7 @@ import { Plus, GraduationCap, BookOpen, Sparkles, Puzzle, Shuffle, Trophy } from
 import { useState } from "react";
 import { toast } from "sonner";
 import { predicateFromScore, SURAHS } from "@/lib/quran";
+import { MelanjutkanAyat } from "@/components/MelanjutkanAyat";
 
 export const Route = createFileRoute("/_authenticated/ujian")({
   head: () => ({ meta: [{ title: "Ujian Tahfidz — SAQU" }] }),
@@ -123,9 +124,12 @@ function UjianList() {
 
 function GamesTahfidz() {
   return (
-    <div className="grid gap-4 lg:grid-cols-2">
-      <SambungAyatGame />
-      <TebakSuratGame />
+    <div className="space-y-4">
+      <MelanjutkanAyat />
+      <div className="grid gap-4 lg:grid-cols-2">
+        <SambungAyatGame />
+        <TebakSuratGame />
+      </div>
     </div>
   );
 }

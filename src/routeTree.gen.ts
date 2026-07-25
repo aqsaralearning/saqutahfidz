@@ -18,6 +18,7 @@ import { Route as AuthenticatedTasmiRouteImport } from './routes/_authenticated/
 import { Route as AuthenticatedSetoranRouteImport } from './routes/_authenticated/setoran'
 import { Route as AuthenticatedSantriRouteImport } from './routes/_authenticated/santri'
 import { Route as AuthenticatedPengaturanRouteImport } from './routes/_authenticated/pengaturan'
+import { Route as AuthenticatedLaporanHarianRouteImport } from './routes/_authenticated/laporan-harian'
 import { Route as AuthenticatedLaporanRouteImport } from './routes/_authenticated/laporan'
 import { Route as AuthenticatedHalaqohRouteImport } from './routes/_authenticated/halaqoh'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
@@ -72,6 +73,12 @@ const AuthenticatedPengaturanRoute = AuthenticatedPengaturanRouteImport.update({
   path: '/pengaturan',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedLaporanHarianRoute =
+  AuthenticatedLaporanHarianRouteImport.update({
+    id: '/laporan-harian',
+    path: '/laporan-harian',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedLaporanRoute = AuthenticatedLaporanRouteImport.update({
   id: '/laporan',
   path: '/laporan',
@@ -130,6 +137,7 @@ export interface FileRoutesByFullPath {
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/halaqoh': typeof AuthenticatedHalaqohRoute
   '/laporan': typeof AuthenticatedLaporanRoute
+  '/laporan-harian': typeof AuthenticatedLaporanHarianRoute
   '/pengaturan': typeof AuthenticatedPengaturanRoute
   '/santri': typeof AuthenticatedSantriRouteWithChildren
   '/setoran': typeof AuthenticatedSetoranRoute
@@ -149,6 +157,7 @@ export interface FileRoutesByTo {
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/halaqoh': typeof AuthenticatedHalaqohRoute
   '/laporan': typeof AuthenticatedLaporanRoute
+  '/laporan-harian': typeof AuthenticatedLaporanHarianRoute
   '/pengaturan': typeof AuthenticatedPengaturanRoute
   '/santri': typeof AuthenticatedSantriRouteWithChildren
   '/setoran': typeof AuthenticatedSetoranRoute
@@ -170,6 +179,7 @@ export interface FileRoutesById {
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/halaqoh': typeof AuthenticatedHalaqohRoute
   '/_authenticated/laporan': typeof AuthenticatedLaporanRoute
+  '/_authenticated/laporan-harian': typeof AuthenticatedLaporanHarianRoute
   '/_authenticated/pengaturan': typeof AuthenticatedPengaturanRoute
   '/_authenticated/santri': typeof AuthenticatedSantriRouteWithChildren
   '/_authenticated/setoran': typeof AuthenticatedSetoranRoute
@@ -191,6 +201,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/halaqoh'
     | '/laporan'
+    | '/laporan-harian'
     | '/pengaturan'
     | '/santri'
     | '/setoran'
@@ -210,6 +221,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/halaqoh'
     | '/laporan'
+    | '/laporan-harian'
     | '/pengaturan'
     | '/santri'
     | '/setoran'
@@ -230,6 +242,7 @@ export interface FileRouteTypes {
     | '/_authenticated/dashboard'
     | '/_authenticated/halaqoh'
     | '/_authenticated/laporan'
+    | '/_authenticated/laporan-harian'
     | '/_authenticated/pengaturan'
     | '/_authenticated/santri'
     | '/_authenticated/setoran'
@@ -315,6 +328,13 @@ declare module '@tanstack/react-router' {
       path: '/pengaturan'
       fullPath: '/pengaturan'
       preLoaderRoute: typeof AuthenticatedPengaturanRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/laporan-harian': {
+      id: '/_authenticated/laporan-harian'
+      path: '/laporan-harian'
+      fullPath: '/laporan-harian'
+      preLoaderRoute: typeof AuthenticatedLaporanHarianRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/laporan': {
@@ -409,6 +429,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedHalaqohRoute: typeof AuthenticatedHalaqohRoute
   AuthenticatedLaporanRoute: typeof AuthenticatedLaporanRoute
+  AuthenticatedLaporanHarianRoute: typeof AuthenticatedLaporanHarianRoute
   AuthenticatedPengaturanRoute: typeof AuthenticatedPengaturanRoute
   AuthenticatedSantriRoute: typeof AuthenticatedSantriRouteWithChildren
   AuthenticatedSetoranRoute: typeof AuthenticatedSetoranRoute
@@ -420,6 +441,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   AuthenticatedHalaqohRoute: AuthenticatedHalaqohRoute,
   AuthenticatedLaporanRoute: AuthenticatedLaporanRoute,
+  AuthenticatedLaporanHarianRoute: AuthenticatedLaporanHarianRoute,
   AuthenticatedPengaturanRoute: AuthenticatedPengaturanRoute,
   AuthenticatedSantriRoute: AuthenticatedSantriRouteWithChildren,
   AuthenticatedSetoranRoute: AuthenticatedSetoranRoute,
