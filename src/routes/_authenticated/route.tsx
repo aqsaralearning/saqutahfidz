@@ -26,6 +26,7 @@ const NAV = [
   { to: "/ujian", icon: GraduationCap, label: "Ujian Tahfidz" },
   { to: "/halaqoh", icon: CalendarCheck, label: "Halaqoh & Absensi" },
   { to: "/laporan", icon: FileBarChart, label: "Laporan" },
+  { to: "/laporan-harian", icon: FileText, label: "Laporan Harian" },
 ] as const;
 
 function AuthedLayout() {
