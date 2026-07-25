@@ -13,6 +13,7 @@ import { Plus, GraduationCap, BookOpen, Sparkles, Puzzle, Shuffle, Trophy } from
 import { useState } from "react";
 import { toast } from "sonner";
 import { predicateFromScore, SURAHS } from "@/lib/quran";
+import { MelanjutkanAyat } from "@/components/MelanjutkanAyat";
 
 export const Route = createFileRoute("/_authenticated/ujian")({
   head: () => ({ meta: [{ title: "Ujian Tahfidz — SAQU" }] }),
