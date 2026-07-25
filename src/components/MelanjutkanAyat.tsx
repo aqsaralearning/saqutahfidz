@@ -140,7 +140,7 @@ export function MelanjutkanAyat() {
               {promptQ.isLoading ? (
                 <Loader2 className="mx-auto h-6 w-6 animate-spin text-muted-foreground" />
               ) : (
-                <p dir="rtl" lang="ar" className="font-quran text-3xl leading-loose text-foreground">
+                <p dir="rtl" lang="ar" className="font-arabic text-3xl leading-loose text-foreground">
                   {promptQ.data} <span className="text-leaf">﴿{toArabicNum(current.ayat)}﻾</span>
                 </p>
               )}
@@ -161,7 +161,7 @@ export function MelanjutkanAyat() {
                   <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
                 ) : (
                   <>
-                    <p dir="rtl" lang="ar" className="font-quran text-3xl leading-loose text-foreground text-center">
+                    <p dir="rtl" lang="ar" className="font-arabic text-3xl leading-loose text-foreground text-center">
                       {answerQ.data} <span className="text-berry">﴿{toArabicNum(current.ayat + 1)}﻾</span>
                     </p>
                     <p className="mt-3 text-center text-xs text-muted-foreground">
