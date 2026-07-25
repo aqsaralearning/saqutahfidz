@@ -124,9 +124,12 @@ function UjianList() {
 
 function GamesTahfidz() {
   return (
-    <div className="grid gap-4 lg:grid-cols-2">
-      <SambungAyatGame />
-      <TebakSuratGame />
+    <div className="space-y-4">
+      <MelanjutkanAyat />
+      <div className="grid gap-4 lg:grid-cols-2">
+        <SambungAyatGame />
+        <TebakSuratGame />
+      </div>
     </div>
   );
 }
