@@ -2,7 +2,7 @@ import { createFileRoute, redirect, Outlet, Link, useNavigate, useRouterState } 
 import { supabase } from "@/integrations/supabase/client";
 import { useSession, useRoles, useIsAdmin } from "@/lib/use-auth";
 import { Button } from "@/components/ui/button";
-import { LayoutDashboard, Users, BookOpen, Mic, GraduationCap, CalendarCheck, FileBarChart, Settings, LogOut, Menu } from "lucide-react";
+import { LayoutDashboard, Users, BookOpen, Mic, GraduationCap, CalendarCheck, FileBarChart, FileText, Settings, LogOut, Menu } from "lucide-react";
 import { useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { cn } from "@/lib/utils";
