@@ -15,6 +15,7 @@ import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedUjianRouteImport } from './routes/_authenticated/ujian'
 import { Route as AuthenticatedTasmiRouteImport } from './routes/_authenticated/tasmi'
+import { Route as AuthenticatedTahsinRouteImport } from './routes/_authenticated/tahsin'
 import { Route as AuthenticatedSetoranRouteImport } from './routes/_authenticated/setoran'
 import { Route as AuthenticatedSantriRouteImport } from './routes/_authenticated/santri'
 import { Route as AuthenticatedPengaturanRouteImport } from './routes/_authenticated/pengaturan'
@@ -56,6 +57,11 @@ const AuthenticatedUjianRoute = AuthenticatedUjianRouteImport.update({
 const AuthenticatedTasmiRoute = AuthenticatedTasmiRouteImport.update({
   id: '/tasmi',
   path: '/tasmi',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedTahsinRoute = AuthenticatedTahsinRouteImport.update({
+  id: '/tahsin',
+  path: '/tahsin',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AuthenticatedSetoranRoute = AuthenticatedSetoranRouteImport.update({
@@ -141,6 +147,7 @@ export interface FileRoutesByFullPath {
   '/pengaturan': typeof AuthenticatedPengaturanRoute
   '/santri': typeof AuthenticatedSantriRouteWithChildren
   '/setoran': typeof AuthenticatedSetoranRoute
+  '/tahsin': typeof AuthenticatedTahsinRoute
   '/tasmi': typeof AuthenticatedTasmiRoute
   '/ujian': typeof AuthenticatedUjianRouteWithChildren
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
@@ -161,6 +168,7 @@ export interface FileRoutesByTo {
   '/pengaturan': typeof AuthenticatedPengaturanRoute
   '/santri': typeof AuthenticatedSantriRouteWithChildren
   '/setoran': typeof AuthenticatedSetoranRoute
+  '/tahsin': typeof AuthenticatedTahsinRoute
   '/tasmi': typeof AuthenticatedTasmiRoute
   '/ujian': typeof AuthenticatedUjianRouteWithChildren
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
@@ -183,6 +191,7 @@ export interface FileRoutesById {
   '/_authenticated/pengaturan': typeof AuthenticatedPengaturanRoute
   '/_authenticated/santri': typeof AuthenticatedSantriRouteWithChildren
   '/_authenticated/setoran': typeof AuthenticatedSetoranRoute
+  '/_authenticated/tahsin': typeof AuthenticatedTahsinRoute
   '/_authenticated/tasmi': typeof AuthenticatedTasmiRoute
   '/_authenticated/ujian': typeof AuthenticatedUjianRouteWithChildren
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
@@ -205,6 +214,7 @@ export interface FileRouteTypes {
     | '/pengaturan'
     | '/santri'
     | '/setoran'
+    | '/tahsin'
     | '/tasmi'
     | '/ujian'
     | '/.lovable/oauth/consent'
@@ -225,6 +235,7 @@ export interface FileRouteTypes {
     | '/pengaturan'
     | '/santri'
     | '/setoran'
+    | '/tahsin'
     | '/tasmi'
     | '/ujian'
     | '/.lovable/oauth/consent'
@@ -246,6 +257,7 @@ export interface FileRouteTypes {
     | '/_authenticated/pengaturan'
     | '/_authenticated/santri'
     | '/_authenticated/setoran'
+    | '/_authenticated/tahsin'
     | '/_authenticated/tasmi'
     | '/_authenticated/ujian'
     | '/.lovable/oauth/consent'
@@ -307,6 +319,13 @@ declare module '@tanstack/react-router' {
       path: '/tasmi'
       fullPath: '/tasmi'
       preLoaderRoute: typeof AuthenticatedTasmiRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/tahsin': {
+      id: '/_authenticated/tahsin'
+      path: '/tahsin'
+      fullPath: '/tahsin'
+      preLoaderRoute: typeof AuthenticatedTahsinRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/setoran': {
@@ -433,6 +452,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedPengaturanRoute: typeof AuthenticatedPengaturanRoute
   AuthenticatedSantriRoute: typeof AuthenticatedSantriRouteWithChildren
   AuthenticatedSetoranRoute: typeof AuthenticatedSetoranRoute
+  AuthenticatedTahsinRoute: typeof AuthenticatedTahsinRoute
   AuthenticatedTasmiRoute: typeof AuthenticatedTasmiRoute
   AuthenticatedUjianRoute: typeof AuthenticatedUjianRouteWithChildren
 }
@@ -445,6 +465,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedPengaturanRoute: AuthenticatedPengaturanRoute,
   AuthenticatedSantriRoute: AuthenticatedSantriRouteWithChildren,
   AuthenticatedSetoranRoute: AuthenticatedSetoranRoute,
+  AuthenticatedTahsinRoute: AuthenticatedTahsinRoute,
   AuthenticatedTasmiRoute: AuthenticatedTasmiRoute,
   AuthenticatedUjianRoute: AuthenticatedUjianRouteWithChildren,
 }

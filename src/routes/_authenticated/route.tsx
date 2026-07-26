@@ -2,7 +2,7 @@ import { createFileRoute, redirect, Outlet, Link, useNavigate, useRouterState } 
 import { supabase } from "@/integrations/supabase/client";
 import { useSession, useRoles, useIsAdmin } from "@/lib/use-auth";
 import { Button } from "@/components/ui/button";
-import { LayoutDashboard, Users, BookOpen, Mic, GraduationCap, CalendarCheck, FileBarChart, FileText, Settings, LogOut, Menu } from "lucide-react";
+import { LayoutDashboard, Users, BookOpen, Mic, Sparkles, GraduationCap, CalendarCheck, FileBarChart, FileText, Settings, LogOut, Menu } from "lucide-react";
 import { useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { cn } from "@/lib/utils";
@@ -23,6 +23,7 @@ const NAV = [
   { to: "/santri", icon: Users, label: "Santri" },
   { to: "/setoran", icon: BookOpen, label: "Setoran" },
   { to: "/tasmi", icon: Mic, label: "Tasmi'" },
+  { to: "/tahsin", icon: Sparkles, label: "Tahsin" },
   { to: "/ujian", icon: GraduationCap, label: "Ujian Tahfidz" },
   { to: "/halaqoh", icon: CalendarCheck, label: "Halaqoh & Absensi" },
   { to: "/laporan", icon: FileBarChart, label: "Laporan" },
