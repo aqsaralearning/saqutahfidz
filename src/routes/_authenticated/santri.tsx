@@ -7,9 +7,10 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter } from "@/components/ui/dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Plus, Search, UserCircle } from "lucide-react";
+import { Plus, Search, UserCircle, Upload } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
+import { uploadStudentPhoto, useSignedPhotos } from "@/lib/photo";
 
 export const Route = createFileRoute("/_authenticated/santri")({
   head: () => ({ meta: [{ title: "Data Santri — SAQU Tahfidz" }] }),
