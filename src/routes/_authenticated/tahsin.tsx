@@ -59,13 +59,13 @@ function TahsinPage() {
 
   const { data: rows } = useQuery({
     queryKey: ["tahsin-history"],
-    queryFn: async () => (await supabase.from("tahsin_entries").select("*, students(full_name)").order("date", { ascending: false }).limit(50)).data ?? [],
+    queryFn: async () => (await supabase.from("tahsin_entries" as any).select("*, students(full_name)").order("date", { ascending: false }).limit(50)).data ?? [],
   });
 
   const add = useMutation({
     mutationFn: async () => {
       if (!form.student_id) throw new Error("Pilih santri");
-      const { error } = await supabase.from("tahsin_entries").insert({
+      const { error } = await supabase.from("tahsin_entries" as any).insert({
         ...form,
         teacher_id: user!.id,
         final_score: final,
