@@ -21,6 +21,7 @@ function SantriPage() {
   const qc = useQueryClient();
   const [q, setQ] = useState("");
   const [open, setOpen] = useState(false);
+  const [photoFile, setPhotoFile] = useState<File | null>(null);
   const [form, setForm] = useState<any>({ nis: "", full_name: "", gender: "L", class_level: "1", parent_name: "", parent_phone: "", target_juz: 1 });
 
   const { data: halaqoh } = useQuery({
@@ -35,11 +36,15 @@ function SantriPage() {
 
   const add = useMutation({
     mutationFn: async () => {
-      const { error } = await supabase.from("students").insert(form);
+      const { data, error } = await supabase.from("students").insert(form).select("id").single();
       if (error) throw error;
+      if (photoFile && data?.id) {
+        const path = await uploadStudentPhoto(photoFile, data.id);
+        await supabase.from("students").update({ photo_url: path }).eq("id", data.id);
+      }
     },
     onSuccess: () => {
-      toast.success("Santri ditambahkan"); setOpen(false);
+      toast.success("Santri ditambahkan"); setOpen(false); setPhotoFile(null);
       setForm({ nis: "", full_name: "", gender: "L", class_level: "1", parent_name: "", parent_phone: "", target_juz: 1 });
       qc.invalidateQueries({ queryKey: ["students"] });
     },
