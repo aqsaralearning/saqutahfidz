@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { ArrowLeft, Download } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
 import { generateRaporPDF } from "@/lib/report-pdf";
+import { useSignedPhoto } from "@/lib/photo";
 
 export const Route = createFileRoute("/_authenticated/santri/$id")({
   head: () => ({ meta: [{ title: "Detail Santri — SAQU Tahfidz" }] }),
@@ -35,6 +36,7 @@ function SantriDetail() {
     queryFn: async () => (await supabase.from("exams").select("*").eq("student_id", id).order("date", { ascending: false })).data ?? [],
   });
 
+  const photoUrl = useSignedPhoto(s?.photo_url);
   if (!s) return <p>Memuat...</p>;
   const juzLulus = new Set((exams ?? []).filter((e: any) => e.passed).map((e: any) => e.juz)).size;
   const progress = Math.min(100, (juzLulus / (s.target_juz || 1)) * 100);
@@ -45,9 +47,13 @@ function SantriDetail() {
 
       <Card className="card-fun">
         <CardContent className="p-6 flex flex-wrap items-center gap-6">
-          <div className="grid h-20 w-20 place-items-center rounded-2xl bg-gradient-to-br from-sky to-leaf text-4xl">
-            {s.gender === "L" ? "👦" : "👧"}
-          </div>
+          {photoUrl ? (
+            <img src={photoUrl} alt={s.full_name} className="h-20 w-20 rounded-2xl object-cover" />
+          ) : (
+            <div className="grid h-20 w-20 place-items-center rounded-2xl bg-gradient-to-br from-sky to-leaf text-4xl">
+              {s.gender === "L" ? "👦" : "👧"}
+            </div>
+          )}
           <div className="flex-1 min-w-0">
             <h1 className="font-display text-2xl font-extrabold">{s.full_name}</h1>
             <p className="text-sm text-muted-foreground">NIS {s.nis} · Kelas {s.class_level} · {s.halaqoh?.name ?? "Belum ada halaqoh"}</p>

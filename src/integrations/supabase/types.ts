@@ -400,6 +400,77 @@ export type Database = {
           },
         ]
       }
+      tahsin_entries: {
+        Row: {
+          ayat_from: number | null
+          ayat_to: number | null
+          created_at: string
+          date: string
+          final_score: number | null
+          id: string
+          juz: number | null
+          notes: string | null
+          score_gunnah: number | null
+          score_kelancaran: number | null
+          score_mad: number | null
+          score_makhroj: number | null
+          score_qolqolah: number | null
+          score_vokal: number | null
+          student_id: string
+          surah: string
+          teacher_id: string
+          updated_at: string
+        }
+        Insert: {
+          ayat_from?: number | null
+          ayat_to?: number | null
+          created_at?: string
+          date?: string
+          final_score?: number | null
+          id?: string
+          juz?: number | null
+          notes?: string | null
+          score_gunnah?: number | null
+          score_kelancaran?: number | null
+          score_mad?: number | null
+          score_makhroj?: number | null
+          score_qolqolah?: number | null
+          score_vokal?: number | null
+          student_id: string
+          surah: string
+          teacher_id: string
+          updated_at?: string
+        }
+        Update: {
+          ayat_from?: number | null
+          ayat_to?: number | null
+          created_at?: string
+          date?: string
+          final_score?: number | null
+          id?: string
+          juz?: number | null
+          notes?: string | null
+          score_gunnah?: number | null
+          score_kelancaran?: number | null
+          score_mad?: number | null
+          score_makhroj?: number | null
+          score_qolqolah?: number | null
+          score_vokal?: number | null
+          student_id?: string
+          surah?: string
+          teacher_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tahsin_entries_student_id_fkey"
+            columns: ["student_id"]
+            isOneToOne: false
+            referencedRelation: "students"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       tasmi_entries: {
         Row: {
           created_at: string

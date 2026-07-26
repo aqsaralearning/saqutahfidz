@@ -83,7 +83,10 @@ function TasmiPage() {
 
       <div className="grid gap-6 lg:grid-cols-5">
         <Card className="card-fun lg:col-span-2">
-          <CardHeader><CardTitle className="flex items-center gap-2"><Mic className="h-5 w-5 text-berry" />Tambah Tasmi'</CardTitle></CardHeader>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2"><Mic className="h-5 w-5 text-berry" />Tambah Tasmi'</CardTitle>
+            <p className="text-xs text-muted-foreground">Penerima setoran: <span className="font-semibold text-foreground">{user?.email}</span></p>
+          </CardHeader>
           <CardContent className="space-y-3">
             <div>
               <Label>Santri</Label>

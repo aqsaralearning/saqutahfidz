@@ -103,6 +103,7 @@ function SetoranForm({ jenis }: { jenis: Jenis }) {
           <CardTitle className="capitalize">
             Tambah {jenis === "murojaah" ? "Muroja'ah" : "Ziyadah"}
           </CardTitle>
+          <p className="text-xs text-muted-foreground">Penerima setoran: <span className="font-semibold text-foreground">{user?.email}</span></p>
         </CardHeader>
         <CardContent className="space-y-3">
           <div>
