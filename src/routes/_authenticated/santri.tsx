@@ -53,6 +53,7 @@ function SantriPage() {
 
   const filtered = (santri ?? []).filter((s: any) =>
     !q || s.full_name.toLowerCase().includes(q.toLowerCase()) || s.nis.includes(q));
+  const photoMap = useSignedPhotos(filtered.map((s: any) => s.photo_url));
 
   return (
     <div className="space-y-6">
@@ -94,6 +95,11 @@ function SantriPage() {
               <div><Label>Target Juz</Label><Input type="number" min={1} max={30} value={form.target_juz} onChange={(e) => setForm({ ...form, target_juz: +e.target.value })} /></div>
               <div><Label>Nama Wali</Label><Input value={form.parent_name} onChange={(e) => setForm({ ...form, parent_name: e.target.value })} /></div>
               <div><Label>No. HP Wali</Label><Input value={form.parent_phone} onChange={(e) => setForm({ ...form, parent_phone: e.target.value })} /></div>
+              <div className="col-span-2">
+                <Label className="flex items-center gap-1"><Upload className="h-3.5 w-3.5" />Foto Santri</Label>
+                <Input type="file" accept="image/*" onChange={(e) => setPhotoFile(e.target.files?.[0] ?? null)} />
+                {photoFile && <p className="text-xs text-muted-foreground mt-1">{photoFile.name}</p>}
+              </div>
             </div>
             <DialogFooter><Button onClick={() => add.mutate()} disabled={add.isPending} className="rounded-xl">Simpan</Button></DialogFooter>
           </DialogContent>
@@ -120,8 +126,15 @@ function SantriPage() {
                     <tr key={s.id} className="border-b last:border-0 hover:bg-muted/30">
                       <td className="py-3 pr-3 font-mono text-xs">{s.nis}</td>
                       <td className="py-3">
-                        <div className="flex items-center gap-2 font-semibold"><UserCircle className="h-5 w-5 text-primary" />{s.full_name}</div>
-                        <div className="text-xs text-muted-foreground">{s.gender === "L" ? "Laki-laki" : "Perempuan"}</div>
+                        <div className="flex items-center gap-2 font-semibold">
+                          {s.photo_url && photoMap[s.photo_url] ? (
+                            <img src={photoMap[s.photo_url]} alt={s.full_name} className="h-8 w-8 rounded-full object-cover" />
+                          ) : (
+                            <UserCircle className="h-8 w-8 text-primary" />
+                          )}
+                          {s.full_name}
+                        </div>
+                        <div className="text-xs text-muted-foreground ml-10">{s.gender === "L" ? "Laki-laki" : "Perempuan"}</div>
                       </td>
                       <td>Kelas {s.class_level}</td>
                       <td>{s.halaqoh?.name ?? <span className="text-muted-foreground">-</span>}</td>
