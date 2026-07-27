@@ -59,7 +59,7 @@ function RapotPage() {
       const { data } = await supabase.from("exams").select("student_id, juz, final_score, passed, students(full_name)").eq("passed", true);
       const map = new Map<string, { name: string; juz: Set<number>; scores: number[] }>();
       (data ?? []).forEach((e: any) => {
-        const cur = map.get(e.student_id) ?? { name: e.students?.full_name ?? "-", juz: new Set<number>(), scores: [] };
+        const cur = map.get(e.student_id) ?? { name: e.students?.full_name ?? "-", juz: new Set<number>(), scores: [] as number[] };
         cur.juz.add(e.juz); if (typeof e.final_score === "number") cur.scores.push(e.final_score);
         map.set(e.student_id, cur);
       });
