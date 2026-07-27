@@ -43,16 +43,35 @@ function Dashboard() {
     queryKey: ["recent-ziyadah"],
     queryFn: async () => {
       const { data } = await supabase.from("ziyadah_entries")
-        .select("id, date, surah, ayat_from, ayat_to, score, students(full_name)")
-        .order("date", { ascending: false }).limit(7);
+        .select("id, date, surah, ayat_from, ayat_to, score, student_id, students(full_name)")
+        .order("date", { ascending: false }).limit(30);
       return data ?? [];
+    },
+  });
+
+  const today = new Date().toISOString().slice(0, 10);
+  const { data: belumSetor } = useQuery({
+    queryKey: ["belum-setor", today],
+    queryFn: async () => {
+      const [{ data: allSantri }, { data: ziyToday }, { data: murToday }, { data: tasToday }] = await Promise.all([
+        supabase.from("students").select("id, full_name, class_level").eq("active", true),
+        supabase.from("ziyadah_entries").select("student_id").eq("date", today),
+        supabase.from("murojaah_entries").select("student_id").eq("date", today),
+        supabase.from("tasmi_entries").select("student_id").eq("date", today),
+      ]);
+      const setor = new Set<string>([
+        ...(ziyToday ?? []).map((r: any) => r.student_id),
+        ...(murToday ?? []).map((r: any) => r.student_id),
+        ...(tasToday ?? []).map((r: any) => r.student_id),
+      ]);
+      return (allSantri ?? []).filter((s: any) => !setor.has(s.id));
     },
   });
 
   const chartData = (() => {
     const map = new Map<string, number>();
     (recent ?? []).forEach((r: any) => { map.set(r.date, (map.get(r.date) ?? 0) + 1); });
-    return Array.from(map.entries()).map(([date, setoran]) => ({ date: date.slice(5), setoran })).reverse();
+    return Array.from(map.entries()).slice(0, 7).map(([date, setoran]) => ({ date: date.slice(5), setoran })).reverse();
   })();
 
   return (

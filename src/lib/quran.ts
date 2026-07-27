@@ -135,10 +135,34 @@ export function juzPageRange(juz: number): [number, number] {
   return [start, end];
 }
 
-/** URL gambar mushaf per halaman — file lokal di public/mushaf/ */
+/** Sumber gambar mushaf online — Madani 15 baris (fallback ke teks Uthmani). */
 export function mushafPageUrl(page: number): string {
-  const p = String(page).padStart(3, "0");
-  return `/mushaf/page-${p}.webp`;
+  return `https://www.searchtruth.com/quran/images1/${page}.jpg`;
+}
+
+/** API teks halaman Uthmani (alquran.cloud) sebagai fallback dan sumber utuh. */
+export function mushafPageTextApi(page: number): string {
+  return `https://api.alquran.cloud/v1/page/${page}/quran-uthmani`;
+}
+
+/** Daftar surah yang muncul di setiap juz (nomor surah). */
+export const JUZ_SURAHS: Record<number, number[]> = {
+  1: [1, 2], 2: [2], 3: [2, 3], 4: [3, 4], 5: [4], 6: [4, 5],
+  7: [5, 6], 8: [6, 7], 9: [7, 8], 10: [8, 9], 11: [9, 10, 11],
+  12: [11, 12], 13: [12, 13, 14], 14: [15, 16], 15: [17, 18],
+  16: [18, 19, 20], 17: [21, 22], 18: [23, 24, 25], 19: [25, 26, 27],
+  20: [27, 28, 29], 21: [29, 30, 31, 32, 33], 22: [33, 34, 35, 36],
+  23: [36, 37, 38, 39], 24: [39, 40, 41], 25: [41, 42, 43, 44, 45],
+  26: [46, 47, 48, 49, 50, 51], 27: [51, 52, 53, 54, 55, 56, 57],
+  28: [58, 59, 60, 61, 62, 63, 64, 65, 66],
+  29: [67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77],
+  30: [78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95,
+       96, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110,
+       111, 112, 113, 114],
+};
+
+export function surahsInJuz(juz: number) {
+  return (JUZ_SURAHS[juz] ?? []).map((n) => SURAHS.find((s) => s.no === n)!).filter(Boolean);
 }
 
 export function predicateFromScore(score: number): { key: string; label: string } {
