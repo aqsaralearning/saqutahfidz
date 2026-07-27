@@ -311,6 +311,50 @@ export type Database = {
           },
         ]
       }
+      pelanggaran: {
+        Row: {
+          created_at: string
+          date: string
+          deskripsi: string | null
+          id: string
+          kategori: string
+          points: number
+          recorded_by: string
+          student_id: string
+          tindak_lanjut: string | null
+        }
+        Insert: {
+          created_at?: string
+          date?: string
+          deskripsi?: string | null
+          id?: string
+          kategori: string
+          points?: number
+          recorded_by: string
+          student_id: string
+          tindak_lanjut?: string | null
+        }
+        Update: {
+          created_at?: string
+          date?: string
+          deskripsi?: string | null
+          id?: string
+          kategori?: string
+          points?: number
+          recorded_by?: string
+          student_id?: string
+          tindak_lanjut?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "pelanggaran_student_id_fkey"
+            columns: ["student_id"]
+            isOneToOne: false
+            referencedRelation: "students"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
           avatar_url: string | null

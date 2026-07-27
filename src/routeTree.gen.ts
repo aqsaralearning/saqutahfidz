@@ -18,7 +18,9 @@ import { Route as AuthenticatedTasmiRouteImport } from './routes/_authenticated/
 import { Route as AuthenticatedTahsinRouteImport } from './routes/_authenticated/tahsin'
 import { Route as AuthenticatedSetoranRouteImport } from './routes/_authenticated/setoran'
 import { Route as AuthenticatedSantriRouteImport } from './routes/_authenticated/santri'
+import { Route as AuthenticatedRapotRouteImport } from './routes/_authenticated/rapot'
 import { Route as AuthenticatedPengaturanRouteImport } from './routes/_authenticated/pengaturan'
+import { Route as AuthenticatedPelanggaranRouteImport } from './routes/_authenticated/pelanggaran'
 import { Route as AuthenticatedLaporanHarianRouteImport } from './routes/_authenticated/laporan-harian'
 import { Route as AuthenticatedLaporanRouteImport } from './routes/_authenticated/laporan'
 import { Route as AuthenticatedHalaqohRouteImport } from './routes/_authenticated/halaqoh'
@@ -74,11 +76,22 @@ const AuthenticatedSantriRoute = AuthenticatedSantriRouteImport.update({
   path: '/santri',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedRapotRoute = AuthenticatedRapotRouteImport.update({
+  id: '/rapot',
+  path: '/rapot',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedPengaturanRoute = AuthenticatedPengaturanRouteImport.update({
   id: '/pengaturan',
   path: '/pengaturan',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedPelanggaranRoute =
+  AuthenticatedPelanggaranRouteImport.update({
+    id: '/pelanggaran',
+    path: '/pelanggaran',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedLaporanHarianRoute =
   AuthenticatedLaporanHarianRouteImport.update({
     id: '/laporan-harian',
@@ -144,7 +157,9 @@ export interface FileRoutesByFullPath {
   '/halaqoh': typeof AuthenticatedHalaqohRoute
   '/laporan': typeof AuthenticatedLaporanRoute
   '/laporan-harian': typeof AuthenticatedLaporanHarianRoute
+  '/pelanggaran': typeof AuthenticatedPelanggaranRoute
   '/pengaturan': typeof AuthenticatedPengaturanRoute
+  '/rapot': typeof AuthenticatedRapotRoute
   '/santri': typeof AuthenticatedSantriRouteWithChildren
   '/setoran': typeof AuthenticatedSetoranRoute
   '/tahsin': typeof AuthenticatedTahsinRoute
@@ -165,7 +180,9 @@ export interface FileRoutesByTo {
   '/halaqoh': typeof AuthenticatedHalaqohRoute
   '/laporan': typeof AuthenticatedLaporanRoute
   '/laporan-harian': typeof AuthenticatedLaporanHarianRoute
+  '/pelanggaran': typeof AuthenticatedPelanggaranRoute
   '/pengaturan': typeof AuthenticatedPengaturanRoute
+  '/rapot': typeof AuthenticatedRapotRoute
   '/santri': typeof AuthenticatedSantriRouteWithChildren
   '/setoran': typeof AuthenticatedSetoranRoute
   '/tahsin': typeof AuthenticatedTahsinRoute
@@ -188,7 +205,9 @@ export interface FileRoutesById {
   '/_authenticated/halaqoh': typeof AuthenticatedHalaqohRoute
   '/_authenticated/laporan': typeof AuthenticatedLaporanRoute
   '/_authenticated/laporan-harian': typeof AuthenticatedLaporanHarianRoute
+  '/_authenticated/pelanggaran': typeof AuthenticatedPelanggaranRoute
   '/_authenticated/pengaturan': typeof AuthenticatedPengaturanRoute
+  '/_authenticated/rapot': typeof AuthenticatedRapotRoute
   '/_authenticated/santri': typeof AuthenticatedSantriRouteWithChildren
   '/_authenticated/setoran': typeof AuthenticatedSetoranRoute
   '/_authenticated/tahsin': typeof AuthenticatedTahsinRoute
@@ -211,7 +230,9 @@ export interface FileRouteTypes {
     | '/halaqoh'
     | '/laporan'
     | '/laporan-harian'
+    | '/pelanggaran'
     | '/pengaturan'
+    | '/rapot'
     | '/santri'
     | '/setoran'
     | '/tahsin'
@@ -232,7 +253,9 @@ export interface FileRouteTypes {
     | '/halaqoh'
     | '/laporan'
     | '/laporan-harian'
+    | '/pelanggaran'
     | '/pengaturan'
+    | '/rapot'
     | '/santri'
     | '/setoran'
     | '/tahsin'
@@ -254,7 +277,9 @@ export interface FileRouteTypes {
     | '/_authenticated/halaqoh'
     | '/_authenticated/laporan'
     | '/_authenticated/laporan-harian'
+    | '/_authenticated/pelanggaran'
     | '/_authenticated/pengaturan'
+    | '/_authenticated/rapot'
     | '/_authenticated/santri'
     | '/_authenticated/setoran'
     | '/_authenticated/tahsin'
@@ -342,11 +367,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedSantriRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/rapot': {
+      id: '/_authenticated/rapot'
+      path: '/rapot'
+      fullPath: '/rapot'
+      preLoaderRoute: typeof AuthenticatedRapotRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/pengaturan': {
       id: '/_authenticated/pengaturan'
       path: '/pengaturan'
       fullPath: '/pengaturan'
       preLoaderRoute: typeof AuthenticatedPengaturanRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/pelanggaran': {
+      id: '/_authenticated/pelanggaran'
+      path: '/pelanggaran'
+      fullPath: '/pelanggaran'
+      preLoaderRoute: typeof AuthenticatedPelanggaranRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/laporan-harian': {
@@ -449,7 +488,9 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedHalaqohRoute: typeof AuthenticatedHalaqohRoute
   AuthenticatedLaporanRoute: typeof AuthenticatedLaporanRoute
   AuthenticatedLaporanHarianRoute: typeof AuthenticatedLaporanHarianRoute
+  AuthenticatedPelanggaranRoute: typeof AuthenticatedPelanggaranRoute
   AuthenticatedPengaturanRoute: typeof AuthenticatedPengaturanRoute
+  AuthenticatedRapotRoute: typeof AuthenticatedRapotRoute
   AuthenticatedSantriRoute: typeof AuthenticatedSantriRouteWithChildren
   AuthenticatedSetoranRoute: typeof AuthenticatedSetoranRoute
   AuthenticatedTahsinRoute: typeof AuthenticatedTahsinRoute
@@ -462,7 +503,9 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedHalaqohRoute: AuthenticatedHalaqohRoute,
   AuthenticatedLaporanRoute: AuthenticatedLaporanRoute,
   AuthenticatedLaporanHarianRoute: AuthenticatedLaporanHarianRoute,
+  AuthenticatedPelanggaranRoute: AuthenticatedPelanggaranRoute,
   AuthenticatedPengaturanRoute: AuthenticatedPengaturanRoute,
+  AuthenticatedRapotRoute: AuthenticatedRapotRoute,
   AuthenticatedSantriRoute: AuthenticatedSantriRouteWithChildren,
   AuthenticatedSetoranRoute: AuthenticatedSetoranRoute,
   AuthenticatedTahsinRoute: AuthenticatedTahsinRoute,

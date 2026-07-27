@@ -9,7 +9,7 @@ import { Label } from "@/components/ui/label";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter } from "@/components/ui/dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Plus } from "lucide-react";
+import { Plus, UserCog } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 
@@ -18,14 +18,12 @@ export const Route = createFileRoute("/_authenticated/halaqoh")({
   component: HalaqohPage,
 });
 
-const HARI = ["Ahad", "Senin", "Selasa", "Rabu", "Kamis", "Jum'at", "Sabtu"];
-
 function HalaqohPage() {
   return (
     <div className="space-y-6">
       <div>
         <h1 className="font-display text-3xl font-extrabold">Halaqoh & Absensi</h1>
-        <p className="text-muted-foreground">Kelompok halaqoh, jadwal, dan absensi harian santri.</p>
+        <p className="text-muted-foreground">Kelompok halaqoh, ustadz pembimbing, dan absensi harian santri.</p>
       </div>
       <Tabs defaultValue="halaqoh">
         <TabsList className="rounded-xl">
@@ -43,14 +41,45 @@ function HalaqohTab() {
   const qc = useQueryClient();
   const isAdmin = useIsAdmin();
   const [open, setOpen] = useState(false);
-  const [form, setForm] = useState({ name: "", level: "1", description: "" });
+  const [form, setForm] = useState<any>({ name: "", level: "1", musyrif_id: "", description: "" });
+
   const { data: rows } = useQuery({
     queryKey: ["halaqoh-full"],
     queryFn: async () => (await supabase.from("halaqoh").select("*").order("name")).data ?? [],
   });
+  // Daftar profil calon musyrif (semua profil — admin dapat memilih)
+  const { data: musyrifList } = useQuery({
+    queryKey: ["musyrif-list"],
+    enabled: isAdmin,
+    queryFn: async () => (await supabase.from("profiles").select("id, full_name").order("full_name")).data ?? [],
+  });
+  const musyrifName = (id: string | null) =>
+    (musyrifList ?? []).find((p: any) => p.id === id)?.full_name || "-";
+
   const add = useMutation({
-    mutationFn: async () => { const { error } = await supabase.from("halaqoh").insert(form); if (error) throw error; },
-    onSuccess: () => { toast.success("Halaqoh dibuat"); setOpen(false); qc.invalidateQueries({ queryKey: ["halaqoh-full"] }); qc.invalidateQueries({ queryKey: ["halaqoh"] }); },
+    mutationFn: async () => {
+      const payload: any = {
+        name: form.name, level: form.level, description: form.description,
+        musyrif_id: form.musyrif_id || null,
+      };
+      const { error } = await supabase.from("halaqoh").insert(payload);
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      toast.success("Halaqoh disimpan");
+      setOpen(false); setForm({ name: "", level: "1", musyrif_id: "", description: "" });
+      qc.invalidateQueries({ queryKey: ["halaqoh-full"] });
+      qc.invalidateQueries({ queryKey: ["halaqoh"] });
+    },
+    onError: (e: any) => toast.error(e.message),
+  });
+
+  const assignMusyrif = useMutation({
+    mutationFn: async ({ id, musyrif_id }: { id: string; musyrif_id: string | null }) => {
+      const { error } = await supabase.from("halaqoh").update({ musyrif_id }).eq("id", id);
+      if (error) throw error;
+    },
+    onSuccess: () => { toast.success("Ustadz halaqoh diperbarui"); qc.invalidateQueries({ queryKey: ["halaqoh-full"] }); },
     onError: (e: any) => toast.error(e.message),
   });
 
@@ -70,6 +99,15 @@ function HalaqohTab() {
                   <SelectContent>{["1","2","3","4","5","6"].map(k => <SelectItem key={k} value={k}>Kelas {k}</SelectItem>)}</SelectContent>
                 </Select>
               </div>
+              <div>
+                <Label>Ustadz / Musyrif Pembimbing</Label>
+                <Select value={form.musyrif_id} onValueChange={(v) => setForm({ ...form, musyrif_id: v })}>
+                  <SelectTrigger><SelectValue placeholder="Pilih ustadz" /></SelectTrigger>
+                  <SelectContent className="max-h-64">
+                    {(musyrifList ?? []).map((p: any) => <SelectItem key={p.id} value={p.id}>{p.full_name || "(tanpa nama)"}</SelectItem>)}
+                  </SelectContent>
+                </Select>
+              </div>
               <div><Label>Keterangan</Label><Input value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} /></div>
             </div>
             <DialogFooter><Button onClick={() => add.mutate()} disabled={add.isPending}>Simpan</Button></DialogFooter>
@@ -79,10 +117,24 @@ function HalaqohTab() {
       <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-3">
         {(rows ?? []).map((h: any) => (
           <Card key={h.id} className="card-fun">
-            <CardContent className="p-5">
+            <CardContent className="p-5 space-y-2">
               <div className="font-display font-extrabold text-lg">{h.name}</div>
               <div className="text-xs text-muted-foreground">Kelas {h.level ?? "-"}</div>
-              {h.description && <p className="mt-2 text-sm">{h.description}</p>}
+              <div className="flex items-center gap-2 text-sm">
+                <UserCog className="h-4 w-4 text-primary" />
+                <span className="font-semibold">Ustadz:</span> {musyrifName(h.musyrif_id)}
+              </div>
+              {h.description && <p className="text-sm text-muted-foreground">{h.description}</p>}
+              {isAdmin && (
+                <div className="pt-2">
+                  <Select value={h.musyrif_id || ""} onValueChange={(v) => assignMusyrif.mutate({ id: h.id, musyrif_id: v || null })}>
+                    <SelectTrigger className="h-8 text-xs"><SelectValue placeholder="Tetapkan ustadz" /></SelectTrigger>
+                    <SelectContent>
+                      {(musyrifList ?? []).map((p: any) => <SelectItem key={p.id} value={p.id}>{p.full_name}</SelectItem>)}
+                    </SelectContent>
+                  </Select>
+                </div>
+              )}
             </CardContent>
           </Card>
         ))}
@@ -134,10 +186,7 @@ function AbsensiTab() {
   return (
     <div className="space-y-4">
       <div className="flex flex-wrap items-end gap-3">
-        <div>
-          <Label>Tanggal</Label>
-          <Input type="date" value={date} onChange={(e) => setDate(e.target.value)} />
-        </div>
+        <div><Label>Tanggal</Label><Input type="date" value={date} onChange={(e) => setDate(e.target.value)} /></div>
         <div className="min-w-56">
           <Label>Halaqoh</Label>
           <Select value={halaqohId} onValueChange={setHalaqohId}>
