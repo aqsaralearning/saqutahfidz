@@ -107,7 +107,7 @@ function Dashboard() {
           <CardHeader><CardTitle>Setoran Terbaru</CardTitle></CardHeader>
           <CardContent className="space-y-3">
             {(recent ?? []).length === 0 && <p className="text-sm text-muted-foreground">Belum ada setoran.</p>}
-            {(recent ?? []).map((r: any) => (
+            {(recent ?? []).slice(0, 7).map((r: any) => (
               <div key={r.id} className="flex items-center justify-between text-sm border-b pb-2 last:border-0">
                 <div>
                   <div className="font-semibold">{r.students?.full_name}</div>
@@ -119,6 +119,27 @@ function Dashboard() {
           </CardContent>
         </Card>
       </div>
+
+      <Card className="card-fun">
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2 text-berry">
+            <TrendingUp className="h-5 w-5" /> Santri Belum Setor Hari Ini ({(belumSetor ?? []).length})
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          {(belumSetor ?? []).length === 0 ? (
+            <p className="text-sm text-leaf font-semibold">Alhamdulillah, seluruh santri sudah setor hari ini 🎉</p>
+          ) : (
+            <div className="flex flex-wrap gap-2">
+              {(belumSetor ?? []).map((s: any) => (
+                <span key={s.id} className="rounded-full bg-berry/10 px-3 py-1 text-xs font-semibold text-berry border border-berry/30">
+                  {s.full_name} <span className="opacity-60">· Kls {s.class_level}</span>
+                </span>
+              ))}
+            </div>
+          )}
+        </CardContent>
+      </Card>
     </div>
   );
 }
