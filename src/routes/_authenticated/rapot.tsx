@@ -49,7 +49,7 @@ function RapotPage() {
   });
   const { data: pel } = useQuery({
     queryKey: ["rapot-pel", studentId], enabled: !!studentId,
-    queryFn: async () => (await supabase.from("pelanggaran" as any).select("points").eq("student_id", studentId)).data ?? [],
+    queryFn: async () => (await (supabase as any).from("pelanggaran").select("points").eq("student_id", studentId)).data ?? [],
   });
 
   // Ranking global — juz lulus

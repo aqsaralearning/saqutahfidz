@@ -40,13 +40,13 @@ function PelanggaranPage() {
   });
   const { data: rows } = useQuery({
     queryKey: ["pelanggaran-list"],
-    queryFn: async () => (await supabase.from("pelanggaran" as any).select("*, students(full_name, class_level)").order("date", { ascending: false }).limit(100)).data ?? [],
+    queryFn: async () => (await (supabase as any).from("pelanggaran").select("*, students(full_name, class_level)").order("date", { ascending: false }).limit(100)).data ?? [],
   });
 
   const add = useMutation({
     mutationFn: async () => {
       if (!form.student_id) throw new Error("Pilih santri");
-      const { error } = await supabase.from("pelanggaran" as any).insert({
+      const { error } = await (supabase as any).from("pelanggaran").insert({
         student_id: form.student_id, recorded_by: user!.id, date: form.date,
         kategori: form.kategori, points: form.points, deskripsi: form.deskripsi, tindak_lanjut: form.tindak_lanjut,
       });
